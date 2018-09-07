@@ -37,6 +37,7 @@ function yaamp_get_algos()
 		'quark',
 		'qubit',
 		'rainforest',
+		'renesis',
 		'c11',
 		'x11',
 		'x11evo',
@@ -179,6 +180,7 @@ function getAlgoColors($algo)
 		'quark'		=> '#c0c0c0',
 		'qubit'		=> '#d0a0f0',
 		'rainforest'	=> '#d0f0a0',
+		'renesis'	=> '#d0f0a0',
 		'lyra2'		=> '#80a0f0',
 		'lyra2v2'	=> '#80c0f0',
 		'lyra2z'	=> '#80b0f0',
@@ -267,6 +269,7 @@ function getAlgoPort($algo)
 		'blake2s'	=> 5766,
 		'penta'		=> 5833,
 		'rainforest'	=> 7443,
+		'renesis' => 5252,
 		'luffa'		=> 5933,
 		'm7m'		=> 6033,
 		'veltor'	=> 5034,
@@ -282,7 +285,7 @@ function getAlgoPort($algo)
 		'polytimos'	=> 8463,
 		'skunk'		=> 8433,
 		'tribus'	=> 8533,
-	        'a5a'   	=> 8633,
+	    'a5a'   	=> 8633,
 	);
 
 	global $configCustomPorts;
