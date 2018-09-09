@@ -29,7 +29,7 @@ void renesis_hash(const char* input, char* output, uint32_t len)
 	sph_jh512_context        ctx_jh;
 	sph_cubehash512_context  ctx_cubehash;
 	sph_fugue512_context	 ctx_fugue;
-	sph_gost512_context	 	 ctx_gost;
+	sph_gost512_context	 ctx_gost;
 	
 	uint32_t hash[64];
 	
