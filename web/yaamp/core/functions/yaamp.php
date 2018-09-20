@@ -21,7 +21,6 @@ function yaamp_get_algos()
 		'blake2s',
 		'decred',
 		'deep',
-		'equihash',
 		'hmq1725',
 		'keccak',
 		'keccakc',
@@ -182,7 +181,6 @@ function getAlgoColors($algo)
 		'lbry'		=> '#b0d0e0',
 		'luffa'		=> '#a0c0c0',
 		'm7m'		=> '#d0a0a0',
-		'equihash'		=> '#d0a0f0',
 		'penta'		=> '#80c0c0',
 		'nist5'		=> '#c0e0e0',
 		'quark'		=> '#c0c0c0', 
@@ -297,7 +295,6 @@ function getAlgoPort($algo)
 		'skunk'		=> 8433,
 		'tribus'	=> 8533,
 	    'a5a'   	=> 8633,
-		'equihash'	=> 2142,
 		
 	);
 
