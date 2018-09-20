@@ -120,7 +120,9 @@ YAAMP_ALGO g_algos[] =
 	{"x14", x14_hash, 1, 0, 0},
 	{"x15", x15_hash, 1, 0, 0},
 	{"x17", x17_hash, 1, 0, 0},
-
+	{"bcd", bcd_hash, 1, 0, 0},
+	
+	
 	{"x11evo", x11evo_hash, 1, 0, 0},
 	{"xevan", xevan_hash, 0x100, 0, 0},
 
@@ -189,8 +191,7 @@ YAAMP_ALGO g_algos[] =
 	{"aergo", aergo_hash, 1, 0, 0},
 
 	{"balloon", balloon_hash, 1, 0, 0},
-
-	
+		
 	{"sha256t", sha256t_hash, 1, 0, 0}, // sha256 3x
 
 	{"sib", sib_hash, 1, 0, 0},

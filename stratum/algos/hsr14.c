@@ -16,8 +16,7 @@
 #include "../sha3/sph_echo.h"
 #include "../sha3/sph_hamsi.h"
 #include "../sha3/sph_fugue.h"
-
-#include "sm3.h"
+#include "../sha3/sph_sm3.h"
 
 #include "common.h"
 
@@ -87,7 +86,7 @@ void hsr_hash(const char* input, char* output, uint32_t len)
     sm3_init(&ctx_sm3);
     sm3_update(&ctx_sm3, hash, 64);
     memset(hash, 0, sizeof hash);
-    sm3_close(&ctx_sm3, hash);
+    sph_sm3_close(&ctx_sm3, hash);
 
     sph_hamsi512_init(&ctx_hamsi1);
     sph_hamsi512(&ctx_hamsi1, hash, 64);
