@@ -194,7 +194,7 @@ void coinbase_create(YAAMP_COIND *coind, YAAMP_JOB_TEMPLATE *templ, json_value *
 	else if(strcmp(coind->symbol, "XZC") == 0) {
 		char script_payee[1024];
 		if (coind->charity_percent <= 0)
-			coind->charity_percent = 25; // wrong coinbase 40 instead of 40 + 10 = 50
+			coind->charity_percent = 14; // wrong coinbase 40 instead of 40 + 10 = 50
 
 		json_int_t charity_amount = (available * coind->charity_percent) / 100;
 
@@ -204,15 +204,15 @@ void coinbase_create(YAAMP_COIND *coind, YAAMP_JOB_TEMPLATE *templ, json_value *
 		strcat(templ->coinb2, "06");
 		job_pack_tx(coind, templ->coinb2, available, NULL);
 		base58_decode("aCAgTPgtYcA4EysU4UKC86EQd5cTtHtCcr", script_payee);
-		job_pack_tx(coind, templ->coinb2, charity_amount/5, script_payee);
+		job_pack_tx(coind, templ->coinb2, charity_amount*0.1428571428571429, script_payee);
 		base58_decode(coind->charity_address, script_payee); // may change
-		job_pack_tx(coind, templ->coinb2, charity_amount/5, script_payee);
+		job_pack_tx(coind, templ->coinb2, charity_amount*0.1428571428571429, script_payee);
 		base58_decode("aQ18FBVFtnueucZKeVg4srhmzbpAeb1KoN", script_payee);
-		job_pack_tx(coind, templ->coinb2, charity_amount/5, script_payee);
+		job_pack_tx(coind, templ->coinb2, charity_amount*0.1428571428571429, script_payee);
 		base58_decode("a1HwTdCmQV3NspP2QqCGpehoFpi8NY4Zg3", script_payee);
-		job_pack_tx(coind, templ->coinb2, charity_amount/5, script_payee);
+		job_pack_tx(coind, templ->coinb2, charity_amount*0.4285714285714286, script_payee);
 		base58_decode("a1kCCGddf5pMXSipLVD9hBG2MGGVNaJ15U", script_payee);
-		job_pack_tx(coind, templ->coinb2, charity_amount/5, script_payee);
+		job_pack_tx(coind, templ->coinb2, charity_amount*0.1428571428571429, script_payee);
 		strcat(templ->coinb2, "00000000"); // locktime
 
 		coind->reward = (double)available/100000000*coind->reward_mul;
@@ -323,7 +323,38 @@ void coinbase_create(YAAMP_COIND *coind, YAAMP_JOB_TEMPLATE *templ, json_value *
 		coind->reward = (double)available/100000000;
 		return;
 	}
-
+	
+		if (strcmp(coind->symbol, "NPS") == 0)
+{
+	char payees[4];
+	int npayees = 1;
+	char script_dests[4028] = { 0 };
+	//
+	bool founderreward_enabled = json_get_bool(json_result, "founderreward_enabled");
+	json_value* founderreward = json_get_array(json_result, "founderreward");
+	if (founderreward)
+	{
+		const char *payee = json_get_string(founderreward, "payee");
+		json_int_t amount = json_get_int(founderreward, "amount");
+		if (payee && amount)
+		{
+			char script_payee[128] = { 0 };
+			npayees++;
+			available -= amount;
+			base58_decode(payee, script_payee);
+			job_pack_tx(coind, script_dests, amount, script_payee);
+		}
+	}
+	
+ 	sprintf(payees, "%02x", npayees);
+	strcat(templ->coinb2, payees);
+	strcat(templ->coinb2, script_dests);
+	job_pack_tx(coind, templ->coinb2, available, NULL);
+	strcat(templ->coinb2, "00000000"); // locktime
+	coind->reward = (double)available / 100000000 * coind->reward_mul;
+	return;
+	}
+	
 	if(strcmp(coind->symbol, "XVC") == 0)
 	{
 		char charity_payee[256];
@@ -475,7 +506,7 @@ void coinbase_create(YAAMP_COIND *coind, YAAMP_JOB_TEMPLATE *templ, json_value *
 		//debuglog("%s %d dests %s\n", coind->symbol, npayees, script_dests);
 		return;
 	}
-
+	
 	else if(strcmp(coind->symbol, "ENT") == 0)
 	{
 		char script_dests[2048] = { 0 };
