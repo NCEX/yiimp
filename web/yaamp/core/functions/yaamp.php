@@ -50,6 +50,7 @@ function yaamp_get_algos()
 		'x16r',
 		'x16s',
 		'x17',
+		'x22i',
 		'xevan',
 		'geek',
 		'groestl', // dmd-gr -m 256 (deprecated)
@@ -159,6 +160,7 @@ function getAlgoColors($algo)
 		'x16r'		=> '#f0b080',
 		'x16s'		=> '#f0b080',
 		'x17'		=> '#f0b0a0',
+		'x22i'		=> '#f0f0a0',
 		'xevan'         => '#f0b0a0',
 		'allium'	=> '#80a0d0',
 		'argon2'	=> '#e0d0e0',
@@ -241,6 +243,7 @@ function getAlgoPort($algo)
 		'x16r'		=> 3636,
 		'x16s'		=> 3663,
 		'x17'		=> 3737,
+		'x17'		=> 4200,
 		'aergo'         => 3691,
 		'xevan'		=> 3739,
 		'hmq1725'	=> 3747,
