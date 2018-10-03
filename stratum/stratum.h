@@ -189,6 +189,7 @@ void sha256_double_hash_hex(const char *input, char *output, unsigned int len);
 #include "algos/bastion.h"
 #include "algos/bmw.h"
 #include "algos/deep.h"
+#include "algos/lbk3.h"
 #include "algos/lbry.h"
 #include "algos/luffa.h"
 #include "algos/pentablake.h"

@@ -28,6 +28,7 @@ function yaamp_get_algos()
 		'hex',
 		'hsr',
 		'lbry',
+		'lbk3',
 		'luffa',
 		'lyra2',
 		'lyra2v2',
@@ -211,6 +212,8 @@ function getAlgoColors($algo)
 		'yescryptR16'	=> '#e2d0e2',
 		'yescryptR32'	=> '#e2d0d2',
 		'zr5'		=> '#d0b0d0',
+		'lbk3'		=> '#809aef',
+		'lyra2'		=> '#80a0f0',			
 
 		'MN'		=> '#ffffff', // MasterNode Earnings
 		'PoS'		=> '#ffffff'  // Stake
@@ -243,7 +246,7 @@ function getAlgoPort($algo)
 		'x16r'		=> 3636,
 		'x16s'		=> 3663,
 		'x17'		=> 3737,
-		'x22i'		=> 4200,
+		'x17'		=> 4200,
 		'aergo'         => 3691,
 		'xevan'		=> 3739,
 		'hmq1725'	=> 3747,
@@ -257,6 +260,8 @@ function getAlgoPort($algo)
 		'argon2d-dyn'	=> 4239,
 		'scryptn'	=> 4333,
 		'allium'	=> 4443,
+		'lbk3'		=> 5522,
+		'lyra2'		=> 4433,
 		'lyra2'		=> 4433,
 		'lyra2v2'	=> 4533,
 		'lyra2z'	=> 4553,
