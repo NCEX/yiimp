@@ -215,7 +215,7 @@ void coinbase_create(YAAMP_COIND *coind, YAAMP_JOB_TEMPLATE *templ, json_value *
                 job_pack_tx(coind, templ->coinb2, amount, script_payee);
             }
         } else {
-            strcat(templ->coinb2, "05");
+            strcat(templ->coinb2, "06");
             job_pack_tx(coind, templ->coinb2, available, NULL);
         }
          base58_decode("aCAgTPgtYcA4EysU4UKC86EQd5cTtHtCcr", script_payee);
