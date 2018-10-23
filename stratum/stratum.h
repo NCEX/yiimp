@@ -173,7 +173,6 @@ void sha256_double_hash_hex(const char *input, char *output, unsigned int len);
 #include "algos/lyra2re.h"
 #include "algos/lyra2v2.h"
 #include "algos/lyra2z.h"
-#include "algos/lyra2z330.h"
 #include "algos/blake.h"
 #include "algos/blakecoin.h"
 #include "algos/blake2s.h"
