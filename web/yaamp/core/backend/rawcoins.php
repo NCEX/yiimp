@@ -204,6 +204,21 @@ function updateRawcoins()
 			}
 		}
 	}
+	
+	if (!exchange_get('escodex', 'disabled')) {
+		$list = escodex_api_query('ticker');
+		if(is_array($list) && !empty($list))
+		{
+			dborun("UPDATE markets SET deleted=true WHERE name='escodex'");
+			foreach($list as $ticker) {
+				#debuglog (json_encode($ticker));
+				if (strtoupper($ticker->base) !== 'BTC')
+					continue;
+				$symbol = strtoupper($ticker->quote);
+				updateRawCoin('escodex', $symbol);
+			}
+		}
+	}
 
 	if (!exchange_get('hitbtc', 'disabled')) {
 		$list = hitbtc_api_query('symbols');
@@ -374,6 +389,22 @@ function updateRawcoins()
 		}
 	}
 
+	if (!exchange_get('tradeogre', 'disabled')) {
+		$list = tradeogre_api_query('markets');
+		if(is_array($list) && !empty($list))
+		{
+			dborun("UPDATE markets SET deleted=true WHERE name='tradeogre'");
+			foreach($list as $ticker) {
+				$symbol_index = key($ticker);
+				$e = explode('-', $symbol_index);
+				if (strtoupper($e[0]) !== 'BTC')
+					continue;
+				$symbol = strtoupper($e[1]);
+				updateRawCoin('tradeogre', $symbol);
+			}
+		}
+	}
+
 	if (!exchange_get('tradesatoshi', 'disabled')) {
 		$data = tradesatoshi_api_query('getcurrencies');
 		if(is_object($data) && !empty($data->result))
@@ -444,13 +475,13 @@ function updateRawCoin($marketname, $symbol, $name='unknown')
 			}
 		}
 
-		if (in_array($marketname, array('nova','askcoin','binance','bitz','coinexchange','coinsmarkets','cryptobridge','hitbtc'))) {
+		if (in_array($marketname, array('nova','askcoin','binance','bitz','coinexchange','coinsmarkets','cryptobridge','tradeogre','hitbtc'))) {
 			// don't polute too much the db with new coins, its better from exchanges with labels
 			return;
 		}
 
 		// some other to ignore...
-		if (in_array($marketname, array('crex24','yobit','kucoin','tradesatoshi')))
+		if (in_array($marketname, array('crex24','yobit','coinbene','kucoin','escodex','tradesatoshi')))
 			return;
 
 		if (market_get($marketname, $symbol, "disabled")) {

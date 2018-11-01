@@ -21,9 +21,9 @@ require_once("ccexapi.php");
 require_once("cexio.php");
 require_once("crex24.php");
 require_once("cryptobridge.php");
+require_once("escodex.php");
 require_once("gateio.php");
 require_once("graviex.php");
-require_once("cryptohub.php");
 require_once("kraken.php");
 require_once("poloniex.php");
 require_once("yobit.php");
@@ -42,6 +42,7 @@ require_once("coinexchange.php");
 require_once("coinsmarkets.php");
 require_once("cryptowatch.php");
 require_once("stocksexchange.php");
+require_once("tradeogre.php");
 require_once("tradesatoshi.php");
 
 /* Format an exchange coin Url */
@@ -102,8 +103,6 @@ function getMarketUrl($coin, $marketName)
 		$url = "https://crex24.com/exchange/{$symbol}-{$base}";
 	else if($market == 'cryptobridge')
 		$url = "https://wallet.crypto-bridge.org/market/BRIDGE.{$symbol}_BRIDGE.{$base}";
-	else if($market == 'cryptohub')
-		$url = "https://cryptohub.online/market/{$symbol}/{$base}";
 	else if($market == 'cryptopia')
 		$url = "https://www.cryptopia.co.nz/Exchange?market={$symbol}_{$base}";
 	else if($market == 'cryptowatch')
@@ -112,6 +111,8 @@ function getMarketUrl($coin, $marketName)
 		$url = "https://c-cex.com/?p={$lowsymbol}-{$lowbase}";
 	else if($market == 'empoex')
 		$url = "http://www.empoex.com/trade/{$symbol}-{$base}";
+	else if($market == 'escodex')
+		$url = "https://wallet.escodex.com/market/ESCODEX.{$symbol}_ESCODEX.{$base}";
 	else if($market == 'gateio')
 		$url = "https://gate.io/trade/{$symbol}_{$base}";
 	else if($market == 'graviex')
@@ -128,6 +129,8 @@ function getMarketUrl($coin, $marketName)
 		$url = "https://novaexchange.com/market/{$base}_{$symbol}/";
 	else if($market == 'stocksexchange')
 		$url = "https://stocks.exchange/trade/$symbol/$base";
+	else if($market == 'tradeogre')
+		$url = "https://tradeogre.com/exchange/{$base}-{$symbol}";
 	else if($market == 'tradesatoshi')
 		$url = "https://tradesatoshi.com/Exchange?market={$symbol}_{$base}";
 	else if($market == 'yobit')
