@@ -82,6 +82,8 @@ extern char g_stratum_coin_exclude[256];
 
 extern char g_stratum_algo[256];
 extern double g_stratum_difficulty;
+extern double g_stratum_min_diff;
+extern double g_stratum_max_diff;
 
 extern int g_stratum_max_cons;
 extern int g_stratum_max_ttf;
@@ -217,5 +219,5 @@ void sha256_double_hash_hex(const char *input, char *output, unsigned int len);
 #include "algos/aergo.h"
 #include "algos/hex.h"
 #include "algos/argon2d.h"
-
+#include "algos/pipehash.h"
 

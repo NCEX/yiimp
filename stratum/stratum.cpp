@@ -30,6 +30,8 @@ char g_stratum_coin_exclude[256];
 
 char g_stratum_algo[256];
 double g_stratum_difficulty;
+double g_stratum_min_diff;
+double g_stratum_max_diff;
 
 int g_stratum_max_ttf;
 int g_stratum_max_cons = 5000;
@@ -165,7 +167,6 @@ YAAMP_ALGO g_algos[] =
 	{"keccakc", keccak256_hash, 0x100, 0, 0},
 	{"hex", hex_hash, 0x100, 0, sha256_hash_hex },
 
-		
 	{"phi", phi_hash, 1, 0, 0},
 	{"phi2", phi2_hash, 0x100, 0, 0},
 
@@ -201,11 +202,14 @@ YAAMP_ALGO g_algos[] =
 	{"argon2", argon2a_hash, 0x10000, 0, sha256_hash_hex },
 	{"argon2d-crds", argon2d_crds_hash, 0x10000, 0, 0 }, // Credits Argon2d Implementation
 	{"argon2d-dyn", argon2d_dyn_hash, 0x10000, 0, 0 }, // Dynamic Argon2d Implementation
+	{"argon2d-uis", argon2d_uis_hash, 0x10000, 0, 0 }, // Argon2d Implementation
 	{"vitalium", vitalium_hash, 1, 0, 0},
 	{"aergo", aergo_hash, 1, 0, 0},
 
 	{"balloon", balloon_hash, 1, 0, 0},
-		
+
+	{"pipe", pipe_hash, 1,0,0},
+	
 	{"sha256t", sha256t_hash, 1, 0, 0}, // sha256 3x
 
 	{"sib", sib_hash, 1, 0, 0},
@@ -276,6 +280,9 @@ int main(int argc, char **argv)
 
 	strcpy(g_stratum_algo, iniparser_getstring(ini, "STRATUM:algo", NULL));
 	g_stratum_difficulty = iniparser_getdouble(ini, "STRATUM:difficulty", 16);
+	g_stratum_min_diff = iniparser_getdouble(ini, "STRATUM:diff_min", g_stratum_difficulty/2);
+	g_stratum_max_diff = iniparser_getdouble(ini, "STRATUM:diff_max", g_stratum_difficulty*8192);
+
 	g_stratum_max_cons = iniparser_getint(ini, "STRATUM:max_cons", 5000);
 	g_stratum_max_ttf = iniparser_getint(ini, "STRATUM:max_ttf", 0x70000000);
 	g_stratum_reconnect = iniparser_getint(ini, "STRATUM:reconnect", true);
@@ -313,6 +320,7 @@ int main(int argc, char **argv)
 	g_allow_rolltime = strcmp(g_stratum_algo,"x11evo");
 	g_allow_rolltime = g_allow_rolltime && strcmp(g_stratum_algo,"timetravel");
 	g_allow_rolltime = g_allow_rolltime && strcmp(g_stratum_algo,"bitcore");
+	g_allow_rolltime = g_allow_rolltime && strcmp(g_stratum_algo,"exosis");
 	if (!g_allow_rolltime)
 		stratumlog("note: time roll disallowed for %s algo\n", g_current_algo->name);
 
