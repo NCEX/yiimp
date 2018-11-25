@@ -467,8 +467,8 @@ void coinbase_create(YAAMP_COIND *coind, YAAMP_JOB_TEMPLATE *templ, json_value *
 	}
 	
 	
-	//  add IFX and GTM
-	if ((strcmp(coind->symbol, "IFX") == 0)||(strcmp(coind->symbol, "GTM") == 0)||(strcmp(coind->symbol, "AGM") == 0))
+	//  add IFX & GTM & CRDS & BMN 
+	if ((strcmp(coind->symbol, "IFX") == 0) || (strcmp(coind->symbol, "GTM") == 0) || (strcmp(coind->symbol, "AGM") == 0) || (strcmp(coind->symbol, "CRDS") == 0) || (strcmp(coind->symbol, "BMN") == 0))
 {
 	char payees[4];
 	int npayees = 1;
@@ -489,11 +489,13 @@ void coinbase_create(YAAMP_COIND *coind, YAAMP_JOB_TEMPLATE *templ, json_value *
 		}
 	}
  	json_value* masternode = json_get_object(json_result, "masternode");
-	if (masternode)
+	bool masternode_enabled = json_get_bool(json_result, "masternode_payments_enforced");
+	if (masternode_enabled && masternode)
 	{
+		bool started = json_get_bool(json_result, "masternode_payments_started");
 		const char *payee = json_get_string(masternode, "payee");
 		json_int_t amount = json_get_int(masternode, "amount");
-		if (payee && amount) {
+		if (started && payee && amount) {
 			char script_payee[128] = { 0 };
 			npayees++;
 			available -= amount;
