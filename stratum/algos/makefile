@@ -14,16 +14,15 @@ SOURCES=lyra2re.c lyra2v2.c Lyra2.c lyra2z.c Lyra2-z.c Sponge.c allium.c SWIFFTX
 	deep.c fresh.c groestl.c neoscrypt.c nist5.c quark.c qubit.c skein.c skein2.c \
 	bitcore.c timetravel.c x11evo.c x16r.c x16s.c xevan.c bastion.c hmq17.c sonoa.c \
 	bmw.c luffa.c pentablake.c vitalium.c whirlpool.c whirlpoolx.c zr5.c \
-	scrypt.c scryptn.c sha256.c sha256t.c sha3d.c \
+	scrypt.c scryptn.c sha256.c sha256t.c \
 	yescrypt.c yescrypt-opt.c sha256_Y.c \
 	yespower.c yespower-opt.c sha256-P.c \
 	a5a.c a5amath.c m7m.c magimath.cpp velvet.c \
 	argon2a.c blake2/blake2b.c ar2/argon2.c ar2/core.c ar2/encoding.c ar2/opt.c ar2/thread.c ar2/ar2-scrypt-jane.c \
 	hive.c pomelo.c hex.c argon2d.c geek.c balloon.c bcd.c \
-	phi.c phi2.c polytimos.c rainforest.c renesis.c skunk.c sib.c veltor.c gost.c aergo.c x22i.c lbk3.c pipehash.c dedal.c \
-	binarium_hash_v1.c binarium_hash_v1/hashing/streebog/table/stribog.c binarium_hash_v1/hashing/whirlpool/whirlpool.c binarium_hash_v1/hashing/whirlpool/byte_order.c binarium_hash_v1/encryption/gost2015_kuznechik/SIMD.c binarium_hash_v1/encryption/gost2015_kuznechik/SIMD_tables.c binarium_hash_v1/encryption/gost2015_kuznechik/shared/tables.c binarium_hash_v1/encryption/three_fish/libskein_skein.cc binarium_hash_v1/encryption/salsa20/salsa20.c 
+	phi.c phi2.c polytimos.c rainforest.c renesis.c skunk.c sib.c veltor.c gost.c aergo.c x22i.c lbk3.c pipehash.c dedal.c 
 
-OBJECTS=$(SOURCES:%.c=%.o) $(SOURCES:%.cpp=%.o) $(SOURCES:%.cc=%.o)
+OBJECTS=$(SOURCES:%.c=%.o) $(SOURCES:%.cpp=%.o)
 OUTPUT=libalgos.a
 
 all: $(SOURCES) $(OUTPUT)
