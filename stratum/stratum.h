@@ -221,3 +221,4 @@ void sha256_double_hash_hex(const char *input, char *output, unsigned int len);
 #include "algos/argon2d.h"
 #include "algos/pipehash.h"
 #include "algos/dedal.h"
+#include "algos/binarium_hash_v1.h"
