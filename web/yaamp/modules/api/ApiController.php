@@ -161,12 +161,15 @@ class ApiController extends CommonController
 
 				$btcmhd = yaamp_profitability($coin);
 				$btcmhd = mbitcoinvaluetoa($btcmhd);
+				
+				$difficulty = Itoa2($coin->difficulty, 3);
 
 				$data[$symbol] = array(
 					'algo' => $coin->algo,
 					'port' => getAlgoPort($coin->algo),
 					'name' => $coin->name,
 					'height' => (int) $coin->block_height,
+					'difficulty' => $difficulty,
 					'workers' => $workers,
 					'shares' =>  (int) arraySafeVal($shares,'shares'),
 					'hashrate' => round($factor * $algo_hashrate),
