@@ -123,6 +123,7 @@ YAAMP_ALGO g_algos[] =
 	{"x15", x15_hash, 1, 0, 0},
 	{"x17", x17_hash, 1, 0, 0},
 	{"x18", x18_hash, 1, 0, 0},
+	{"x21s", x21s_hash, 1, 0, 0},
 	{"x22i", x22i_hash, 1, 0, 0},
 	
 	{"bcd", bcd_hash, 1, 0, 0},
@@ -169,6 +170,8 @@ YAAMP_ALGO g_algos[] =
 	{"keccakc", keccak256_hash, 0x100, 0, 0},
 	{"hex", hex_hash, 0x100, 0, sha256_hash_hex },
 
+	{"sha3d", sha3d_hash, 1, 0, 0 },
+	
 	{"phi", phi_hash, 1, 0, 0},
 	{"phi2", phi2_hash, 0x100, 0, 0},
 
