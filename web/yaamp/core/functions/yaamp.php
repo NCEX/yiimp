@@ -6,7 +6,6 @@ function yaamp_get_algos()
 	return array(
 		'sha256',
 		'sha256t',
-		'sha3d',
 		'scrypt',
 		'scryptn',
 		'allium',
@@ -60,7 +59,6 @@ function yaamp_get_algos()
 		'x17',
 		'x18',
 		'x22i',
-		'x21s',
 		'xevan',
 		'geek',
 		'groestl', // dmd-gr -m 256 (deprecated)
@@ -164,7 +162,6 @@ function getAlgoColors($algo)
 	$a = array(
 		'sha256'	=> '#d0d0a0',
 		'sha256t'	=> '#d0d0f0',
-		'sha3d'		=> '#d0d0a0',
 		'scrypt'	=> '#c0c0e0',
 		'neoscrypt'	=> '#a0d0f0',
 		'scryptn'	=> '#d0d0d0',
@@ -183,7 +180,6 @@ function getAlgoColors($algo)
 		'x17'		=> '#f0b0a0',
 		'x18'		=> '#f0b0a0',
 		'x22i'		=> '#f0f0a0',
-		'x21s'		=> '#f0f0a0',
 		'xevan'         => '#f0b0a0',
 		'allium'	=> '#80a0d0',
 		'argon2'	=> '#e0d0e0',
@@ -286,7 +282,6 @@ function getAlgoPort($algo)
 		'x17'		=> 3737,
 		'x18'		=> 3738,
 		'x22i'		=> 4200,
-		'x21s'		=> 3323,
 		'aergo'     => 3691,
 		'xevan'		=> 3739,
 		'hmq1725'	=> 3747,
@@ -317,7 +312,6 @@ function getAlgoPort($algo)
 		'keccak'	=> 5133,
 		'keccakc'	=> 5134,
 		'hex'		=> 5135,
-		'sha3d'		=> 5136,
 		'skein2'	=> 5233,
 		//'groestl'	=> 5333,
 		'dmd-gr'	=> 5333,
