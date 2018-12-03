@@ -145,8 +145,7 @@ YAAMP_ALGO g_algos[] =
 	{"allium", allium_hash, 0x100, 0, 0},
 	{"lyra2", lyra2re_hash, 0x80, 0, 0},
 	{"lyra2v2", lyra2v2_hash, 0x100, 0, 0},
-	{"lyra2z", lyra2z_hash, 0x100, 0, 0}, 
-	{"lyra2vc0ban", lyra2vc0ban_hash, 0x100, 0, 0},
+	{"lyra2z", lyra2z_hash, 0x100, 0, 0},
 	
 	{"bastion", bastion_hash, 1, 0 },
 	{"blake", blake_hash, 1, 0 },
@@ -171,8 +170,6 @@ YAAMP_ALGO g_algos[] =
 	{"keccakc", keccak256_hash, 0x100, 0, 0},
 	{"hex", hex_hash, 0x100, 0, sha256_hash_hex },
 
-	{"sha3d", sha3d_hash, 1, 0, 0 },
-	
 	{"phi", phi_hash, 1, 0, 0},
 	{"phi2", phi2_hash, 0x100, 0, 0},
 
