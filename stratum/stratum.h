@@ -167,10 +167,8 @@ void sha256_double_hash_hex(const char *input, char *output, unsigned int len);
 #include "algos/fresh.h"
 #include "algos/hsr14.h"
 #include "algos/quark.h"
-
 #include "algos/balloon.h"
 #include "algos/bcd.h"
-
 #include "algos/neoscrypt.h"
 #include "algos/allium.h"
 #include "algos/lyra2re.h"
@@ -224,3 +222,4 @@ void sha256_double_hash_hex(const char *input, char *output, unsigned int len);
 #include "algos/binarium_hash_v1.h"
 #include "algos/x21s.h"
 #include "algos/lyra2vc0ban.h"
+#include "algos/x20r.h"
