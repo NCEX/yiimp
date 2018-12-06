@@ -53,7 +53,7 @@ static void get_hash_order(const uint32_t* prevblock, uint8_t* output, uint8_t* 
 	}
 	hr = tspeed + 920 >> 7;
 	
-	uint8_t c = hr - 12;
+	int8_t  c = hr - 12;
 	for (uint8_t i = 0; i < c ; i++) {
 		if (i < 15) {
 			uint8_t j = i >> 1;
