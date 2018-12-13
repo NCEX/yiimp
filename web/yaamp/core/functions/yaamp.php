@@ -94,6 +94,13 @@ function yaamp_get_algos()
 		'yespowerR32',
 		'whirlpool',
 		'zr5',
+		
+		'astralhash',
+		'globalhash',
+		'jeonghash',
+		'padihash',
+		'pawelhash',
+		
 	);
 }
 
@@ -253,7 +260,14 @@ function getAlgoColors($algo)
 		'yespowerR32' => '#e2d0d2',
 		'zr5'		=> '#d0b0d0',
 		'lbk3'		=> '#809aef',
-		'lyra2'		=> '#80a0f0',			
+		'lyra2'		=> '#80a0f0',
+		
+		'astralhash' => '#e2d0d2',
+		'globalhash' => '#e2d0d2',
+		'jeonghash' => '#e2d0d2',
+		'padihash' => '#e2d0d2',
+		'pawelhash' => '#e2d0d2',
+		
 
 		'MN'		=> '#ffffff', // MasterNode Earnings
 		'PoS'		=> '#ffffff'  // Stake
@@ -361,6 +375,12 @@ function getAlgoPort($algo)
 		'skunk'		=> 8433,
 		'tribus'	=> 8533,
 	    'a5a'   	=> 8633,
+		
+		'astralhash'   	=> 8640,
+		'globalhash'   	=> 8650,
+		'jeonghash'   	=> 8660,
+		'padihash'   	=> 8670,
+		'pawelhash'   	=> 8680,
 		
 	);
 
