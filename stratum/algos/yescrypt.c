@@ -355,12 +355,17 @@ void yescrypt_hash(const char *input, char *output, uint32_t len)
 	yescrypt_bsty((uint8_t*)input, len, (uint8_t*)input, len, 2048, 8, 1, (uint8_t*)output, 32);
 }
 
+void yescryptR8_hash(const char *input, char *output, uint32_t len)
+{
+	yescrypt_bsty((uint8_t*)input, len, (uint8_t*)input, len, 2048, 8, 1, (uint8_t*)output, 32);
+}
+
 void yescryptR16_hash(const char *input, char *output, uint32_t len)
 {
-       yescrypt_bsty((uint8_t*)input, len, (uint8_t*)input, len, 4096, 16, 1, (uint8_t*)output, 32);
+	yescrypt_bsty((uint8_t*)input, len, (uint8_t*)input, len, 4096, 16, 1, (uint8_t*)output, 32);
 }
 
 void yescryptR32_hash(const char *input, char *output, uint32_t len)
 {
-       yescrypt_bsty((uint8_t*)input, len, (uint8_t*)input, len, 4096, 32, 1, (uint8_t*)output, 32);
+	yescrypt_bsty((uint8_t*)input, len, (uint8_t*)input, len, 4096, 32, 1, (uint8_t*)output, 32);
 }
