@@ -15,6 +15,7 @@ SOURCES=lyra2re.c lyra2v2.c Lyra2.c lyra2z.c Lyra2-z.c Sponge.c allium.c SWIFFTX
 	bitcore.c timetravel.c x11evo.c x16r.c x16s.c xevan.c bastion.c hmq17.c sonoa.c \
 	bmw.c luffa.c pentablake.c vitalium.c whirlpool.c whirlpoolx.c zr5.c \
 	scrypt.c scryptn.c sha256.c sha256t.c \
+	x16rt.c sha256-d.c \
 	yescrypt.c yescrypt-opt.c sha256_Y.c \
 	yespower.c yespower-opt.c sha256-P.c \
 	a5a.c a5amath.c m7m.c magimath.cpp velvet.c \

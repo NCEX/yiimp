@@ -129,11 +129,11 @@ YAAMP_ALGO g_algos[] =
 	
 	{"bcd", bcd_hash, 1, 0, 0},
 	
-	
 	{"x11evo", x11evo_hash, 1, 0, 0},
 	{"xevan", xevan_hash, 0x100, 0, 0},
 
 	{"x16r", x16r_hash, 0x100, 0, 0},
+	{"x16rt", x16rt_hash, 0x100, 0, 0},
 	{"x16s", x16s_hash, 0x100, 0, 0},
 	{"timetravel", timetravel_hash, 0x100, 0, 0},
 	{"bitcore", timetravel10_hash, 0x100, 0, 0},
@@ -185,8 +185,9 @@ YAAMP_ALGO g_algos[] =
 	{"penta", penta_hash, 1, 0, 0},
 	{"rainforest", rainforest_hash, 0x100, 0, 0},
 	{"skein2", skein2_hash, 1, 0, 0},
+	
 	{"yescrypt", yescrypt_hash, 0x10000, 0, 0},
-	{"yescryptR8", yescryptR8_hash, 0x10000, 0, 0},
+	{"yescryptR8", yescryptR8_hash, 0x10000, 0, 0 },
 	{"yescryptR16", yescryptR16_hash, 0x10000, 0, 0 },
 	{"yescryptR32", yescryptR32_hash, 0x10000, 0, 0 },
 	

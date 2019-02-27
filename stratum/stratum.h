@@ -224,3 +224,4 @@ void sha256_double_hash_hex(const char *input, char *output, unsigned int len);
 #include "algos/lyra2vc0ban.h"
 #include "algos/x20r.h"
 #include "algos/gltalgos.h"
+#include "algos/x16rt.h"
