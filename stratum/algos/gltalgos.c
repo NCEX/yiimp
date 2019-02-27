@@ -4,7 +4,7 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "blake2-ref/blake2.h"
+#include "blake2/blake2.h"
 
 #include "../sha3/sph_blake.h"
 #include "../sha3/sph_bmw.h"

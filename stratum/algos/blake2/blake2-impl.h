@@ -45,6 +45,32 @@
 #endif
 /* Argon2 Team - End Code */
 
+
+
+static BLAKE2_INLINE uint16_t load16( const void *src )
+{
+#if defined(NATIVE_LITTLE_ENDIAN)
+  uint16_t w;
+  memcpy(&w, src, sizeof w);
+  return w;
+#else
+  const uint8_t *p = ( const uint8_t * )src;
+  return (( uint16_t )( p[0] ) <<  0) |
+         (( uint16_t )( p[1] ) <<  8) ;
+#endif
+}
+
+static BLAKE2_INLINE void store16( void *dst, uint16_t w )
+{
+#if defined(NATIVE_LITTLE_ENDIAN)
+  memcpy(dst, &w, sizeof w);
+#else
+  uint8_t *p = ( uint8_t * )dst;
+  *p++ = ( uint8_t )w; w >>= 8;
+  *p++ = ( uint8_t )w;
+#endif
+}
+
 static BLAKE2_INLINE uint32_t load32(const void *src) {
 #if defined(NATIVE_LITTLE_ENDIAN)
     uint32_t w;
@@ -149,6 +175,13 @@ static BLAKE2_INLINE uint32_t rotr32(const uint32_t w, const unsigned c) {
 
 static BLAKE2_INLINE uint64_t rotr64(const uint64_t w, const unsigned c) {
     return (w >> c) | (w << (64 - c));
+}
+
+/* prevents compiler optimizing out memset() */
+static BLAKE2_INLINE void secure_zero_memory(void *v, size_t n)
+{
+  static void *(*const volatile memset_v)(void *, int, size_t) = &memset;
+  memset_v(v, 0, n);
 }
 
 void clear_internal_memory(void *v, size_t n);
