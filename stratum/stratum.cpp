@@ -146,7 +146,7 @@ YAAMP_ALGO g_algos[] =
 	{"lyra2", lyra2re_hash, 0x80, 0, 0},
 	{"lyra2v2", lyra2v2_hash, 0x100, 0, 0},
 	{"lyra2v3", lyra2v3_hash, 0x100, 0, 0},
-	{"lyra2z", lyra2z_hash, 0x100, 0, 0}, 
+	{"lyra2z", lyra2z_hash, 0x100, 0, 0},
 	{"lyra2vc0ban", lyra2vc0ban_hash, 0x100, 0, 0},
 	
 	{"bastion", bastion_hash, 1, 0 },
@@ -207,7 +207,7 @@ YAAMP_ALGO g_algos[] =
 	{"veltor", veltor_hash, 1, 0, 0},
 	{"velvet", velvet_hash, 0x10000, 0, 0},
 	{"argon2", argon2a_hash, 0x10000, 0, sha256_hash_hex },
-	{"argon2d250", argon2d_crds_hash, 0x10000, 0, 0 }, // Credits Argon2d Implementation
+	{"argon2d-crds", argon2d_crds_hash, 0x10000, 0, 0 }, // Credits Argon2d Implementation
 	{"argon2d-dyn", argon2d_dyn_hash, 0x10000, 0, 0 }, // Dynamic Argon2d Implementation
 	{"argon2d-uis", argon2d_uis_hash, 0x10000, 0, 0 }, // Argon2d Implementation
 	{"vitalium", vitalium_hash, 1, 0, 0},
@@ -226,12 +226,10 @@ YAAMP_ALGO g_algos[] =
 	{"whirlpoolx", whirlpoolx_hash, 1, 0, 0},
 	
 	{"astralhash", astralhash_hash, 0x100, 0, 0},
-	{"globalhash", globalhash_hash, 0x100, 0, 0},  
-	{"jeonghash", jeonghash_hash, 0x100, 0, 0},
-	{"padihash", padihash_hash, 0x100, 0, 0}, 
-	{"pawelhash", pawelhash_hash, 0x100, 0, 0},
 	
-	{"honeycomb", beenode_hash, 0x10000, 0, 0},
+	{"jeonghash", jeonghash_hash, 0x100, 0, 0},
+	
+	{"pawelhash", pawelhash_hash, 0x100, 0, 0},
 	
 
 	{"", NULL, 0, 0},
