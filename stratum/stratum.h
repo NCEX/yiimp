@@ -225,4 +225,4 @@ void sha256_double_hash_hex(const char *input, char *output, unsigned int len);
 #include "algos/x20r.h"
 #include "algos/gltalgos.h"
 #include "algos/x16rt.h"
-#include "algos/honeycomb.h"
+#include "algos/beenode.h"
