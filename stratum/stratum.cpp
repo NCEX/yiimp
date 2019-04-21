@@ -231,7 +231,8 @@ YAAMP_ALGO g_algos[] =
 	
 	{"pawelhash", pawelhash_hash, 0x100, 0, 0},
 	
-
+	{"honeycomb", beenode_hash, 0x10000, 0, 0},
+	
 	{"", NULL, 0, 0},
 };
 
