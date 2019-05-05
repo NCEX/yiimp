@@ -41,7 +41,7 @@ function getuserparam($address)
 {
 	if(empty($address)) return null;
 
-	$address = trim(substr($address, 0, 35));
+	$address = trim(substr($address, 0, 52));
 	$user = getdbosql('db_accounts', "username=:ad", array(':ad'=>$address));
 
 	return $user;
