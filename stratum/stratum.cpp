@@ -179,6 +179,7 @@ YAAMP_ALGO g_algos[] =
 	{"skunk", skunk_hash, 1, 0, 0},
 
 	{"bmw", bmw_hash, 1, 0, 0},
+	{"bmw512", bmw512_hash, 0x100, 0, 0},
 	{"lbk3", lbk3_hash, 0x100, 0, 0},
 	{"lbry", lbry_hash, 0x100, 0, 0},
 	{"luffa", luffa_hash, 1, 0, 0},
