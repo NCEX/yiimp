@@ -155,7 +155,20 @@ function BackendCoinsUpdate()
 					$coin->reward = arraySafeVal($template,'coinbasevalue')/100000000 * $coin->reward_mul;
 					$coin->charity_amount = $coin->reward * $coin->charity_percent / 100;
 				}
-
+				
+				else if($coin->symbol == 'BNODE') 
+				{
+                    if(isset($template['masternode'])) 
+					{
+						if (arraySafeVal($template,'masternode_payments_started'))
+						$coin->reward -= arraySafeVal($template['masternode'],'amount',0)/100000000;
+					}
+					if(isset($template['evolution'])) 
+					{
+						$coin->reward -= arraySafeVal($template['evolution'],'amount',10000000)/100000000;
+					}
+           		}
+				
 				else if(!empty($coin->charity_address)) {
 					if(!$coin->charity_amount)
 						$coin->reward -= $coin->reward * $coin->charity_percent / 100;
