@@ -835,6 +835,48 @@ void coinbase_create(YAAMP_COIND *coind, YAAMP_JOB_TEMPLATE *templ, json_value *
 		return;
 	}
 	
+	// Add DigitalNote[XDN]
+    if(strcmp(coind->symbol, "XDN") == 0) {
+
+		// make sure we pay both mn and devops
+		bool founder_enabled = json_get_bool(json_result, "founder_reward_enforced");
+		bool masternode_enabled = json_get_bool(json_result, "enforce_masternode_payments");
+		if (!founder_enabled || !masternode_enabled)
+			return;
+
+ 			// founder/masternode vars
+			char founder_script[1024] = { 0};
+			char masternode_script[1024] = { 0};
+			char founder_payee[256] = { 0};
+			char masternode_payee[256] = { 0};
+			json_int_t part_amount = (5000000000);
+			json_int_t pool_amount = (5000000000*4);
+			json_value* founder = json_get_object(json_result, "founderreward");
+			const char *payee1 = json_get_string(json_result, "payee");
+			const char *payee2 = json_get_string(founder, "payee");
+
+ 			// mn script
+			snprintf(masternode_payee, 255, "%s", payee1);
+			base58_decode(masternode_payee, masternode_script);
+			available -= part_amount;
+
+ 			// payee script
+			snprintf(founder_payee, 255, "%s", payee2);
+			base58_decode(founder_payee, founder_script);
+			available -= part_amount;
+
+ 			// total outputs
+			strcat(templ->coinb2, "03");
+
+ 			// pack the tx
+			job_pack_tx(coind, templ->coinb2, available, NULL);
+			job_pack_tx(coind, templ->coinb2, part_amount, founder_script);
+			job_pack_tx(coind, templ->coinb2, part_amount, masternode_script);
+			strcat(templ->coinb2, "00000000");
+			coind->reward = (double)available/100000000*coind->reward_mul;
+			return;
+    }
+
 	if(strcmp(coind->symbol, "BITC") == 0) 
 	{
 		char *params = (char *)malloc(1024);
