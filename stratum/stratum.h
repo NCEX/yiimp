@@ -227,3 +227,4 @@ void sha256_double_hash_hex(const char *input, char *output, unsigned int len);
 #include "algos/x16rt.h"
 #include "algos/beenode.h"
 #include "algos/bmw512.h"
+#include "algos/x25x.h"
