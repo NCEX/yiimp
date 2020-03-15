@@ -21,3 +21,4 @@ web/assets/
 .idea/*
 web/yaamp/.idea/
 *.0
+.vscode/

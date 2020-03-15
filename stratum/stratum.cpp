@@ -235,6 +235,8 @@ YAAMP_ALGO g_algos[] =
 	
 	{"honeycomb", beenode_hash, 0x10000, 0, 0},
 	
+	{"minotaur", minotaur_hash, 1, 0, 0},
+	
 	{"", NULL, 0, 0},
 };
 
