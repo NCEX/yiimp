@@ -22,7 +22,11 @@
 #include "sha3/sph_whirlpool.h"
 #include "sha3/sph_sha2.h"
 
-#include "common.h"
+#ifndef _MSC_VER
+#define _ALIGN(x) __attribute__ ((aligned(x)))
+#else
+#define _ALIGN(x) __declspec(align(x))
+#endif
 
 // Config
 #define MINOTAUR_ALGO_COUNT	16
@@ -59,23 +63,6 @@ struct TortureGarden {
 // Get a 64-byte hash for given 64-byte input, using given TortureGarden contexts and given algo index
 void get_hash(void *output, const void *input, TortureGarden *garden, unsigned int algo)
 {    
-	sph_blake512_context context_blake;
-    sph_bmw512_context context_bmw;
-    sph_cubehash512_context context_cubehash;
-    sph_echo512_context context_echo;
-    sph_fugue512_context context_fugue;
-    sph_groestl512_context context_groestl;
-    sph_hamsi512_context context_hamsi;
-    sph_jh512_context context_jh;
-    sph_keccak512_context context_keccak;
-    sph_luffa512_context context_luffa;
-    sph_shabal512_context context_shabal;
-    sph_shavite512_context context_shavite;
-    sph_simd512_context context_simd;
-    sph_skein512_context context_skein;
-    sph_whirlpool_context context_whirlpool;
-    sph_sha512_context context_sha2;
-	
 	unsigned char _ALIGN(64) hash[64];
 
     switch (algo) {
@@ -222,7 +209,7 @@ void minotaur_hash(const char* input, char* output, uint32_t len)
     // Find initial sha512 hash
     unsigned char _ALIGN(64) hash[64];
 	sph_sha512_init(&garden.context_sha2);
-	sph_sha512(&garden.context_sha2, input, 80);
+	sph_sha512(&garden.context_sha2, input, len);
 	sph_sha512_close(&garden.context_sha2, hash);
 
     // Assign algos to torture garden nodes based on initial hash
@@ -233,5 +220,5 @@ void minotaur_hash(const char* input, char* output, uint32_t len)
     traverse_garden(&garden, hash, &garden.nodes[0]);
 
 	// Truncate the result
-    memcpy(output, hash, len);
+    memcpy(output, hash, 32);
 }
