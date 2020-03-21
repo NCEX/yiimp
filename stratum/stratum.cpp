@@ -110,6 +110,7 @@ static void neoscrypt_hash(const char* input, char* output, uint32_t len)
 
 YAAMP_ALGO g_algos[] =
 {
+	{"equihash", equi_hash, 1, 0, 0}, 
 	{"sha256", sha256_double_hash, 1, 0, 0},
 	{"scrypt", scrypt_hash, 0x10000, 0, 0},
 	{"scryptn", scryptn_hash, 0x10000, 0, 0},
@@ -198,6 +199,7 @@ YAAMP_ALGO g_algos[] =
 	{"yespowerR16", yespowerR16_hash, 0x10000, 0, 0 },
 	{"yespowerR24", yespowerR24_hash, 0x10000, 0, 0 },
 	{"yespowerR32", yespowerR32_hash, 0x10000, 0, 0 },
+	{"yespowerRES", yespowerRES_hash, 0x10000, 0, 0 },
 	
 	
 	{"zr5", zr5_hash, 1, 0, 0},
@@ -510,4 +512,3 @@ void *stratum_thread(void *p)
 		pthread_detach(thread);
 	}
 }
-
