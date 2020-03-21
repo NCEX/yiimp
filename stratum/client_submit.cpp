@@ -601,8 +601,9 @@ bool client_submit_res(YAAMP_CLIENT *client, json_value *json_params)
 	char extranonce2[32] = { 0 };
 	char extra[160] = { 0 };
 	char nonce[80] = { 0 };
-	char ntime[32] = { 0 };
+	char ntime[33] = { 0 };
 	char vote[8] = { 0 };
+	char res_solution[1344*2 + 64] = { 0 };
 
 	if (strlen(json_params->u.array.values[1]->u.string.ptr) > 32) {
 		clientlog(client, "bad json, wrong jobid len");
@@ -611,25 +612,16 @@ bool client_submit_res(YAAMP_CLIENT *client, json_value *json_params)
 	}
 	int jobid = htoi(json_params->u.array.values[1]->u.string.ptr);
 
-	strncpy(extranonce2, json_params->u.array.values[2]->u.string.ptr, 31);
+	//strncpy(extranonce2, json_params->u.array.values[2]->u.string.ptr, 31);
 	strncpy(ntime, json_params->u.array.values[3]->u.string.ptr, 31);
 	strncpy(nonce, json_params->u.array.values[4]->u.string.ptr, 31);
+	strncpy(res_solution, json_params->u.array.values[4]->u.string.ptr, 1344*2 + 3*2 );
 
-	string_lower(extranonce2);
+	//string_lower(extranonce2);
 	string_lower(ntime);
 	string_lower(nonce);
+	string_lower(res_solution);
 
-	if (json_params->u.array.length == 6) {
-		if (strstr(g_stratum_algo, "phi")) {
-			// lux optional field, smart contral root hashes (not mandatory on shares submit)
-			strncpy(extra, json_params->u.array.values[5]->u.string.ptr, 128);
-			string_lower(extra);
-		} else {
-			// heavycoin vote
-			strncpy(vote, json_params->u.array.values[5]->u.string.ptr, 7);
-			string_lower(vote);
-		}
-	}
 
 	if (g_debuglog_hash) {
 		debuglog("submit %s (uid %d) %d, %s, t=%s, n=%s, extra=%s\n", client->sock->ip, client->userid,
@@ -655,7 +647,9 @@ bool client_submit_res(YAAMP_CLIENT *client, json_value *json_params)
 
 	YAAMP_JOB_TEMPLATE *templ = job->templ;
 
-	if(strlen(nonce) != YAAMP_NONCE_SIZE*2 || !ishexa(nonce, YAAMP_NONCE_SIZE*2)) {
+	std::cerr << strlen(nonce) << std::endl;
+
+	if(strlen(nonce) != YAAMP_RES_NONCE_SIZE*2 || !ishexa(nonce, YAAMP_RES_NONCE_SIZE*2)) {
 		client_submit_error(client, job, 20, "Invalid nonce size", extranonce2, ntime, nonce);
 		return true;
 	}
