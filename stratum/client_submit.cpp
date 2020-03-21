@@ -600,8 +600,8 @@ bool client_submit_res(YAAMP_CLIENT *client, json_value *json_params)
 
 	char extranonce2[32] = { 0 };
 	char extra[160] = { 0 };
-	char nonce[80] = { 0 };
-	char ntime[33] = { 0 };
+	char nonce[65] = { 0 };
+	char ntime[9] = { 0 };
 	char vote[8] = { 0 };
 	char res_solution[1344*2 + 64] = { 0 };
 
@@ -613,8 +613,12 @@ bool client_submit_res(YAAMP_CLIENT *client, json_value *json_params)
 	int jobid = htoi(json_params->u.array.values[1]->u.string.ptr);
 
 	//strncpy(extranonce2, json_params->u.array.values[2]->u.string.ptr, 31);
-	strncpy(ntime, json_params->u.array.values[3]->u.string.ptr, 31);
-	strncpy(nonce, json_params->u.array.values[4]->u.string.ptr, 31);
+	    // we should reverse some params, see job_send.cpp 
+    char rev_ntime[9] = {0};
+    strncpy(rev_ntime, json_params->u.array.values[2]->u.string.ptr, 8);
+    string_be(rev_ntime,ntime); 
+
+	strncpy(nonce, json_params->u.array.values[3]->u.string.ptr, 64);
 	strncpy(res_solution, json_params->u.array.values[4]->u.string.ptr, 1344*2 + 3*2 );
 
 	//string_lower(extranonce2);
@@ -643,12 +647,16 @@ bool client_submit_res(YAAMP_CLIENT *client, json_value *json_params)
 		return true;
 	}
 
-	bool is_decred = job->coind && !strcmp("DCR", job->coind->rpcencoding);
-
 	YAAMP_JOB_TEMPLATE *templ = job->templ;
 
-	std::cerr << strlen(nonce) << std::endl;
-
+	/*
+        std::cerr << "strlen(nonce) = " << strlen(nonce) << ", YAAMP_EQUI_NONCE_SIZE*2 = " << YAAMP_EQUI_NONCE_SIZE*2 << std::endl;
+        // from equi-stratum.cpp ccminer, actually nonce is 32 - 4 = 28 bytes (56 in hex representation)
+    	size_t nonce_len = 32 - stratum.xnonce1_size;
+	    // long nonce without pool prefix (extranonce)
+	    noncestr = bin2hex(&nonce[stratum.xnonce1_size], nonce_len);
+    */
+	
 	if(strlen(nonce) != YAAMP_RES_NONCE_SIZE*2 || !ishexa(nonce, YAAMP_RES_NONCE_SIZE*2)) {
 		client_submit_error(client, job, 20, "Invalid nonce size", extranonce2, ntime, nonce);
 		return true;
@@ -674,53 +682,32 @@ bool client_submit_res(YAAMP_CLIENT *client, json_value *json_params)
 		return true;
 	}
 
+	/*
+	// extranonce2 is absent in equihash
 	if(strlen(extranonce2) != client->extranonce2size*2)
 	{
 		client_submit_error(client, job, 24, "Invalid extranonce2 size", extranonce2, ntime, nonce);
 		return true;
 	}
-
+	*/
+	
+	/*
 	// check if the submitted extranonce is valid
-	if(is_decred && client->extranonce2size > 4) {
-		char extra1_id[16], extra2_id[16];
-		int cmpoft = client->extranonce2size*2 - 8;
-		strcpy(extra1_id, &client->extranonce1[cmpoft]);
-		strcpy(extra2_id, &extranonce2[cmpoft]);
-		int extradiff = (int) strcmp(extra2_id, extra1_id);
-		int extranull = (int) !strcmp(extra2_id, "00000000");
-		if (extranull && client->extranonce2size > 8)
-			extranull = (int) !strcmp(&extranonce2[8], "00000000" "00000000");
-		if (extranull) {
-			debuglog("extranonce %s is empty!, should be %s - %s\n", extranonce2, extra1_id, client->sock->ip);
-			client_submit_error(client, job, 27, "Invalid extranonce2 suffix", extranonce2, ntime, nonce);
-			return true;
-		}
-		if (extradiff) {
-			// some ccminer pre-release doesn't fill correctly the extranonce
-			client_submit_error(client, job, 27, "Invalid extranonce2 suffix", extranonce2, ntime, nonce);
-			socket_send(client->sock, "{\"id\":null,\"method\":\"mining.set_extranonce\",\"params\":[\"%s\",%d]}\n",
-				client->extranonce1, client->extranonce2size);
-			return true;
-		}
-	}
-	else if(!ishexa(extranonce2, client->extranonce2size*2)) {
+	if(!ishexa(extranonce2, client->extranonce2size*2)) {
 		client_submit_error(client, job, 27, "Invalid nonce2", extranonce2, ntime, nonce);
 		return true;
 	}
-
+	*/
+	
 	///////////////////////////////////////////////////////////////////////////////////////////
 
+	std::cerr << "height: " << templ->height << std::endl;
+	
 	YAAMP_JOB_VALUES submitvalues;
 	memset(&submitvalues, 0, sizeof(submitvalues));
 
-	if(is_decred)
-		build_submit_values_decred(&submitvalues, templ, client->extranonce1, extranonce2, ntime, nonce, vote, true);
-	else
-		build_submit_values(&submitvalues, templ, client->extranonce1, extranonce2, ntime, nonce);
-
-	if (templ->height && !strcmp(g_current_algo->name,"lyra2z")) {
-		lyra2z_height = templ->height;
-	}
+	// (!!!)
+    build_submit_values(&submitvalues, templ, client->extranonce1, extranonce2, ntime, nonce);
 
 	// minimum hash diff begins with 0000, for all...
 	uint8_t pfx = submitvalues.hash_bin[30] | submitvalues.hash_bin[31];
