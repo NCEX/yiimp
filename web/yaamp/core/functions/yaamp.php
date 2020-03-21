@@ -96,6 +96,7 @@ function yaamp_get_algos()
 		'yespowerR16',
 		'yespowerR24',
 		'yespowerR32',
+		'yespowerRES',
 		'whirlpool',
 		'zr5',
 		
@@ -267,6 +268,7 @@ function getAlgoColors($algo)
 		'yespowerR16' => '#e2d0d2',
 		'yespowerR24' => '#e2d0d2',
 		'yespowerR32' => '#e2d0d2',
+		'yespowerRES' => '#e2d0d2',
 		'zr5'		=> '#d0b0d0',
 		'lbk3'		=> '#809aef',
 		'lyra2'		=> '#80a0f0',
@@ -378,6 +380,7 @@ function getAlgoPort($algo)
 		'yespowerR16'	=> 6236,
 		'yespowerR24'	=> 6237,
 		'yespowerR32'	=> 6238,
+		'yespowerRES'	=> 6239,
 		'bastion'	=> 6433,
 		'hsr'		=> 7433,
 		'phi'		=> 8333,
