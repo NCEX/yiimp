@@ -42,6 +42,7 @@ void yespowerR8_hash( const char *input, char *output, uint32_t len);
 void yespowerR16_hash( const char *input, char *output, uint32_t len);
 void yespowerR24_hash( const char *input, char *output, uint32_t len);
 void yespowerR32_hash( const char *input, char *output, uint32_t len);
+void yespowerRES_hash( const char *input, char *output, uint32_t len);
 
 /**
  * Internal type used by the memory allocator.  Please do not use it directly.

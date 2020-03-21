@@ -27,6 +27,7 @@ of yescrypt 0.5.
 
 // solardiz recommended yespower 1.0 settings of at least N=2048 r=32 (8 MiB)
 static const yespower_params_t yespower_1_0 = {YESPOWER_1_0, 2048, 32, NULL, 0};
+static const yespower_params_t yespower_1_0_RES = {YESPOWER_1_0, 4096, 32, NULL, 0};
 
 void yespowerR8_hash(const char *input, char *output, uint32_t len)
 {
@@ -51,5 +52,10 @@ void yespowerR32_hash(const char *input, char *output, uint32_t len)
 void yespower_hash(const char *input, char *output, uint32_t len)
 {
 	if (yespower_tls(input, 80, &yespower_1_0, (yespower_binary_t *)output))
+		abort();
+}
+void yespowerRES_hash(const char *input, char *output, uint32_t len)
+{
+	if (yespower_tls(input, 80, &yespower_1_0_RES, (yespower_binary_t *)output))
 		abort();
 }
