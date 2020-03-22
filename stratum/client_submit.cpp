@@ -103,11 +103,22 @@ void build_submit_values_res(YAAMP_JOB_VALUES *submitvalues, YAAMP_JOB_TEMPLATE 
         header.write(nTime, position += 32, 4, 'hex');
         header.write(util.reverseBuffer(new Buffer(rpcData.bits, 'hex')).toString('hex'), position += 4, 4, 'hex');
         header.write(nonce, position += 4, 32, 'hex');
+		
+		CBlockHeader
+        READWRITE(this->nVersion);
+        READWRITE(hashPrevBlock);
+        READWRITE(hashMerkleRoot);
+        READWRITE(hashFinalSaplingRoot);
+        READWRITE(nTime);
+        READWRITE(nBits);
+        READWRITE(nNonce);
+        READWRITE(nSolution);
+		
     */
 
     {
-        sprintf(submitvalues->header, "%s%s%s%s%s%s", templ->version, templ->prevhash_be, submitvalues->merkleroot_be,
-            ntime, templ->nbits, nonce);
+        sprintf(submitvalues->header, "%s%s%s%s%s%s00000000%s%s", templ->version, templ->prevhash_be, submitvalues->merkleroot_be,
+            templ->extradata_be, ntime, templ->nbits, nonce, res_solution);
         ser_string_be(submitvalues->header, submitvalues->header_be, 20);
 	}
 
