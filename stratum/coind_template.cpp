@@ -308,7 +308,14 @@ YAAMP_JOB_TEMPLATE *coind_create_template(YAAMP_COIND *coind)
 	 
 	 // yespowerRES
     if (!strcmp(g_stratum_algo, "yespowerRES")) {
-        const char *finalsaplingroothash = json_get_string(json_result, "finalsaplingroothash");
+        
+		/*
+        // (!) bits <- target (?)
+        const char *target = json_get_string(json_result, "target");
+        std::cerr << "[!]" << " target: " << target << std::endl;
+        */
+		
+		const char *finalsaplingroothash = json_get_string(json_result, "finalsaplingroothash");
         strcpy(templ->extradata_hex, finalsaplingroothash ? finalsaplingroothash : "");
         string_be(templ->extradata_hex,templ->extradata_be);
     }
@@ -506,16 +513,20 @@ YAAMP_JOB_TEMPLATE *coind_create_template(YAAMP_COIND *coind)
         {
             std::string mr = merkle_with_first(txsteps, hash_be);
             std::string hex(mr);
-            for (std::string::iterator it=hex.begin(); it != hex.end(); it += 2) std::swap(it[0], it[1]);
-            std::string hex_reversed(hex.rbegin(), hex.rend());
+            //for (std::string::iterator it=hex.begin(); it != hex.end(); it += 2) std::swap(it[0], it[1]);
+            //std::string hex_reversed(hex.rbegin(), hex.rend());
             //std::cerr << hex_reversed << std::endl;
-            strcpy(templ->mr_hex,hex_reversed.c_str());
+            //strcpy(templ->mr_hex,hex_reversed.c_str());
+            strcpy(templ->mr_hex,hex.c_str());
+            std::cerr << "Merkle (many): " << templ->mr_hex << std::endl;
         } else 
         {
             std::string hex(p);
+            //std::cerr << "conbase hash: " << p << std::endl;
             //for (std::string::iterator it=hex.begin(); it != hex.end(); it += 2) std::swap(it[0], it[1]);
             //std::string hex_reversed(hex.rbegin(), hex.rend());
             strcpy(templ->mr_hex,hex.c_str());
+			std::cerr << "Merkle (one): " << templ->mr_hex << std::endl;
         }
 		
         // standart - merkle_arr = txsteps = templ->txmerkles       - // https://github.com/slushpool/poclbm-zcash/wiki/Stratum-protocol-changes-for-ZCash
@@ -586,7 +597,9 @@ YAAMP_JOB_TEMPLATE *coind_create_template(YAAMP_COIND *coind)
 		templ->txmerkles[strlen(templ->txmerkles)-1] = 0;
 
 //	debuglog("merkle transactions %d [%s]\n", templ->txcount, templ->txmerkles);
-	ser_string_be2(templ->prevhash_hex, templ->prevhash_be, 8);
+	if (!strcmp(g_stratum_algo, "yespowerRES")) {
+        string_be(templ->prevhash_hex, templ->prevhash_be);
+    } else ser_string_be2(templ->prevhash_hex, templ->prevhash_be, 8);
 
 	if(!strcmp(coind->symbol, "LBC"))
 		ser_string_be2(templ->claim_hex, templ->claim_be, 8);
