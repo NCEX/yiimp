@@ -53,7 +53,7 @@ void build_submit_values(YAAMP_JOB_VALUES *submitvalues, YAAMP_JOB_TEMPLATE *tem
 
 /////////////////////////////////////////////
 void build_submit_values_res(YAAMP_JOB_VALUES *submitvalues, YAAMP_JOB_TEMPLATE *templ,
-	const char *nonce1, const char *nonce2, const char *ntime, const char *nonce, const char *res_solution)
+	const char *nonce1, const char *nonce2, const char *ntime, const char *nonce )
 {
     // debug
     std::cerr << "build_submit_values_res" << std::endl;
@@ -62,8 +62,7 @@ void build_submit_values_res(YAAMP_JOB_VALUES *submitvalues, YAAMP_JOB_TEMPLATE 
     std::cerr << "nonce2 = " << nonce2 << std::endl;
     std::cerr << "ntime = " << ntime << std::endl;
     std::cerr << "nonce = " << nonce << std::endl;
-    //std::cerr << "res_solution = " << res_solution << std::endl;
-
+    
 
 	// let's assemble coinbase
 	// sprintf(submitvalues->coinbase, "%s%s%s%s", templ->coinb1, nonce1, nonce2, templ->coinb2);
@@ -128,8 +127,8 @@ void build_submit_values_res(YAAMP_JOB_VALUES *submitvalues, YAAMP_JOB_TEMPLATE 
         string_be(templ->nbits,rev_nbits);
 
 
-        sprintf(submitvalues->header, "%s%s%s%s%s%s00000000%s%s", rev_version, templ->prevhash_be, submitvalues->merkleroot_be,
-            templ->extradata_be, rev_ntime, rev_nbits, nonce, res_solution);
+        sprintf(submitvalues->header, "%s%s%s%s%s%s00000000%s", rev_version, templ->prevhash_be, submitvalues->merkleroot_be,
+            templ->extradata_be, rev_ntime, rev_nbits, nonce);
         //std::cerr << "strlen(submitvalues->header) = " << strlen(submitvalues->header) << std::endl;
         //ser_string_be(submitvalues->header, submitvalues->header_be, 20); // 20? 
 
@@ -711,7 +710,6 @@ bool client_submit_res(YAAMP_CLIENT *client, json_value *json_params)
 	char nonce[65] = { 0 };
 	char ntime[9] = { 0 };
 	char vote[8] = { 0 };
-	char res_solution[1344*2 + 64] = { 0 };
 
 	if (strlen(json_params->u.array.values[1]->u.string.ptr) > 32) {
 		clientlog(client, "bad json, wrong jobid len");
@@ -720,20 +718,18 @@ bool client_submit_res(YAAMP_CLIENT *client, json_value *json_params)
 	}
 	int jobid = htoi(json_params->u.array.values[1]->u.string.ptr);
 
-	//strncpy(extranonce2, json_params->u.array.values[2]->u.string.ptr, 31);
+	strncpy(extranonce2, json_params->u.array.values[2]->u.string.ptr, 31);
 	    // we should reverse some params, see job_send.cpp 
     char rev_ntime[9] = {0};
     strncpy(rev_ntime, json_params->u.array.values[2]->u.string.ptr, 8);
     string_be(rev_ntime,ntime); 
 
 	strncpy(nonce, json_params->u.array.values[3]->u.string.ptr, 64);
-	strncpy(res_solution, json_params->u.array.values[4]->u.string.ptr, 1344*2 + 3*2 );
-
-	//string_lower(extranonce2);
+	
+	string_lower(extranonce2);
 	string_lower(ntime);
 	string_lower(nonce);
-	string_lower(res_solution);
-
+	
 
 	if (g_debuglog_hash) {
 		debuglog("submit %s (uid %d) %d, %s, t=%s, n=%s, extra=%s\n", client->sock->ip, client->userid,
@@ -790,22 +786,21 @@ bool client_submit_res(YAAMP_CLIENT *client, json_value *json_params)
 		return true;
 	}
 
-	/*
-	// extranonce2 is absent in equihash
+	
 	if(strlen(extranonce2) != client->extranonce2size*2)
 	{
 		client_submit_error(client, job, 24, "Invalid extranonce2 size", extranonce2, ntime, nonce);
 		return true;
 	}
-	*/
 	
-	/*
+	
+	
 	// check if the submitted extranonce is valid
 	if(!ishexa(extranonce2, client->extranonce2size*2)) {
 		client_submit_error(client, job, 27, "Invalid nonce2", extranonce2, ntime, nonce);
 		return true;
 	}
-	*/
+	
 	
 	///////////////////////////////////////////////////////////////////////////////////////////
 
@@ -815,7 +810,7 @@ bool client_submit_res(YAAMP_CLIENT *client, json_value *json_params)
 	memset(&submitvalues, 0, sizeof(submitvalues));
 
 	// (!!!)
-    build_submit_values_res(&submitvalues, templ, client->extranonce1, extranonce2, ntime, nonce, res_solution);
+    build_submit_values(&submitvalues, templ, client->extranonce1, extranonce2, ntime, nonce);
 
 	// minimum hash diff begins with 0000, for all...
 	uint8_t pfx = submitvalues.hash_bin[30] | submitvalues.hash_bin[31];

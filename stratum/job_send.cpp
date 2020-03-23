@@ -33,20 +33,6 @@ static void job_mining_notify_buffer(YAAMP_JOB *job, char *buffer)
 	
     // yespowerRES job
 
-    /*
-        // blockTemplate.js
-        this.jobParams = [
-                this.jobId,
-                util.packUInt32LE(this.rpcData.version).toString('hex'),
-                this.prevHashReversed,
-                this.merkleRootReversed,
-                this.hashReserved, //hashReserved
-                util.packUInt32LE(rpcData.curtime).toString('hex'),
-                util.reverseBuffer(new Buffer(this.rpcDta.bits, 'hex')).toString('hex'),
-                true
-            ];
-    */
-
     if (!strcmp(g_stratum_algo, "yespowerRES")) {
         char rev_version[32] = {0};
         char prevHashReversed[65] = {0};
@@ -55,18 +41,17 @@ static void job_mining_notify_buffer(YAAMP_JOB *job, char *buffer)
         char rev_nbits[32] = {0};
 
 
-        string_be(templ->version,rev_version);
-        string_be(templ->prevhash_hex,prevHashReversed);
-        string_be(templ->mr_hex,merkleRootReversed);
+        //string_be(templ->version,rev_version);
+        //string_be(templ->prevhash_hex,prevHashReversed);
+        //string_be(templ->mr_hex,merkleRootReversed);
 
         //memset(merkleRootReversed, 0x30, 64); merkleRootReversed[65] = 0;
 
         string_be(templ->ntime,rev_ntime);
         string_be(templ->nbits,rev_nbits);
-        // https://github.com/slushpool/poclbm-zcash/wiki/Stratum-protocol-changes-for-ZCash
         // jobId, version, prevHashReversed, merkleRootReversed, hashReserved (finalsaplingroothash), curtime, nbits
-        sprintf(buffer, "{\"id\":null,\"method\":\"mining.notify\",\"params\":[\"%x\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",true]}\n",
-		job->id, rev_version, prevHashReversed, merkleRootReversed, templ->extradata_be, rev_ntime, rev_nbits);
+        sprintf(buffer, "{\"id\":null,\"method\":\"mining.notify\",\"params\":[\"%x\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",true]}\n",
+		job->id,  templ->prevhash_hex, templ->coinb1, templ->coinb2, templ->mr_hex, templ->txmerkles, templ->version, rev_nbits, rev_ntime, templ->extradata_be);
         return;
     }
 	
