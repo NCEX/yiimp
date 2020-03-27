@@ -458,10 +458,6 @@ YAAMP_JOB_TEMPLATE *coind_create_template(YAAMP_COIND *coind)
             return NULL;
         }
 
-        // coinbase_create_equi(coind, templ, json_result);
-        // here we will take coinbase tx from rpcdata, instead of manually creation
-        // TODO: implement coinbase_create_equi
-
         templ->value = json_get_int(json_coinbasetxn, "powreward");
         const char *p = json_get_string(json_coinbasetxn, "hash");
 		const char *d = json_get_string(json_coinbasetxn, "data");
@@ -500,9 +496,14 @@ YAAMP_JOB_TEMPLATE *coind_create_template(YAAMP_COIND *coind)
             std::string hex_reversed(hex.rbegin(), hex.rend());
             std::cerr << "[" << i << "] \"" << txsteps[i] << "\" - " "\"" << hex_reversed << "\""<< std::endl;
             
+
         }
         */
-                if (txsteps.size() > 0) 
+           
+
+      
+        if (txsteps.size() > 0) 
+
         {
             std::string mr = merkle_with_first(txsteps, hash_be);
             std::string hex(mr);
@@ -517,6 +518,7 @@ YAAMP_JOB_TEMPLATE *coind_create_template(YAAMP_COIND *coind)
             //std::string hex_reversed(hex.rbegin(), hex.rend());
             strcpy(templ->mr_hex,hex.c_str());
         }
+
 		
         // standart - merkle_arr = txsteps = templ->txmerkles       - // https://github.com/slushpool/poclbm-zcash/wiki/Stratum-protocol-changes-for-ZCash
         // equishash&yespowerRES - merkle_arr->merkleroot (including coinbase)  - // https://en.bitcoin.it/wiki/Stratum_mining_protocol#mining.notify
@@ -529,6 +531,7 @@ YAAMP_JOB_TEMPLATE *coind_create_template(YAAMP_COIND *coind)
         https://en.bitcoin.it/wiki/Stratum_mining_protocol#mining.notify
         List of merkle branches. The generation transaction is hashed against the merkle branches to build the final merkle root.
         */
+
     }
 
 	if (templ->has_filtered_txs) {
