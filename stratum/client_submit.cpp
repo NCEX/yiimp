@@ -119,6 +119,12 @@ void build_submit_values_res(YAAMP_JOB_VALUES *submitvalues, YAAMP_JOB_TEMPLATE 
 
     {
         
+
+	/*	sprintf(submitvalues->header, "%s%s%s%s%s%s00000000%s", templ->version, templ->prevhash_be, submitvalues->merkleroot_be,
+            templ->extradata_be, ntime, templ->nbits, nonce);
+        ser_string_be(submitvalues->header, submitvalues->header_be, 20);
+	*/
+	
 		char rev_version[32] = {0};
         char rev_ntime[32] = {0};
         char rev_nbits[32] = {0};
@@ -144,13 +150,14 @@ void build_submit_values_res(YAAMP_JOB_VALUES *submitvalues, YAAMP_JOB_TEMPLATE 
         // zec/kmd header - 4+32+32+32+4+4+32 = 140 
         // zec/kmd header + sol - 4+32+32+32+4+4+32 + 1344 + 3 = 1487
 
+       
 	}
 
 	binlify(submitvalues->header_bin, submitvalues->header_be);
 
 	//std::cerr << "blockheader: " << submitvalues->header_be << std::endl;
 	
-    //	printf("%s\n", submitvalues->header_be);
+    	printf("%s\n", submitvalues->header_be);
 	int header_len = strlen(submitvalues->header)/2;
 	g_current_algo->hash_function((char *)submitvalues->header_bin, (char *)submitvalues->hash_bin, header_len);
 
@@ -707,9 +714,9 @@ bool client_submit_res(YAAMP_CLIENT *client, json_value *json_params)
 
 	char extranonce2[32] = { 0 };
 	char extra[160] = { 0 };
-	char nonce[65] = { 0 };
+	char nonce[80] = { 0 };
 	char ntime[9] = { 0 };
-	char vote[8] = { 0 };
+	char vote[33] = { 0 };
 
 	if (strlen(json_params->u.array.values[1]->u.string.ptr) > 32) {
 		clientlog(client, "bad json, wrong jobid len");
@@ -754,7 +761,7 @@ bool client_submit_res(YAAMP_CLIENT *client, json_value *json_params)
 	YAAMP_JOB_TEMPLATE *templ = job->templ;
 
 	/*
-        std::cerr << "strlen(nonce) = " << strlen(nonce) << ", YAAMP_EQUI_NONCE_SIZE*2 = " << YAAMP_EQUI_NONCE_SIZE*2 << std::endl;
+        std::cerr << "strlen(nonce) = " << strlen(nonce) << ", YAAMP_RES_NONCE_SIZE*2 = " << YAAMP_RES_NONCE_SIZE*2 << std::endl;
         // from equi-stratum.cpp ccminer, actually nonce is 32 - 4 = 28 bytes (56 in hex representation)
     	size_t nonce_len = 32 - stratum.xnonce1_size;
 	    // long nonce without pool prefix (extranonce)
@@ -810,7 +817,7 @@ bool client_submit_res(YAAMP_CLIENT *client, json_value *json_params)
 	memset(&submitvalues, 0, sizeof(submitvalues));
 
 	// (!!!)
-    build_submit_values(&submitvalues, templ, client->extranonce1, extranonce2, ntime, nonce);
+    build_submit_values_res(&submitvalues, templ, client->extranonce1, extranonce2, ntime, nonce);
 
 	// minimum hash diff begins with 0000, for all...
 	uint8_t pfx = submitvalues.hash_bin[30] | submitvalues.hash_bin[31];
