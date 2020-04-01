@@ -9,15 +9,15 @@ CFLAGS= $(CXXFLAGS) -std=gnu99
 LDFLAGS=-O2 -lgmp
 
 SOURCES=lyra2re.c lyra2v2.c Lyra2.c lyra2z.c Lyra2-z.c Sponge.c allium.c SWIFFTX/SWIFFTX.c lyra2vc0ban.c lyra2v3.c \
-	c11.c x11.c x12.c x13.c hsr14.c x14.c x15.c x17.c x17r.c x18.c \
+	c11.c x11.c x12.c x13.c hsr14.c x14.c x15.c x17.c x18.c \
 	blake.c blakecoin.c blake2s.c jha.c keccak.c lbry.c tribus.c \
 	deep.c fresh.c groestl.c neoscrypt.c nist5.c quark.c qubit.c skein.c skein2.c bmw512.c \
-	bitcore.c timetravel.c x11evo.c x16r.c x16rv2.c x16s.c xevan.c bastion.c hmq17.c sonoa.c \
+	bitcore.c timetravel.c x11evo.c x16r.c x16s.c xevan.c bastion.c hmq17.c sonoa.c \
 	bmw.c luffa.c pentablake.c vitalium.c whirlpool.c whirlpoolx.c zr5.c \
 	scrypt.c scryptn.c sha256.c sha256t.c \
 	x16rt.c sha256-d.c minotaur.c \
 	yescrypt.c yescrypt-opt.c sha256_Y.c \
-	yespower.c yespower-opt.c sha256-P.c \
+	yespower/yespower-platform.c yespower/yespower-combined.c sha256-P.c \
 	a5a.c a5amath.c m7m.c magimath.cpp velvet.c \
 	argon2a.c blake2/blake2b.c blake2-ref/blake2b.c blake2-ref/blake2s.c ar2/argon2.c ar2/core.c ar2/encoding.c ar2/opt.c ar2/thread.c ar2/ar2-scrypt-jane.c \
 	hive.c pomelo.c hex.c argon2d.c geek.c balloon.c bcd.c \
