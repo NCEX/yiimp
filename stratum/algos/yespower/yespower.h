@@ -124,7 +124,8 @@ extern int yespower_tls(const uint8_t *src, size_t srclen,
     const yespower_params_t *params, yespower_binary_t *dst);
 
 void yespower_hash(const char* input, char* output, uint32_t len);
-void yespowerR8_hash(const char* input, char* output, uint32_t len);
+void yespowerR16_hash(const char* input, char* output, uint32_t len);
+void yespowerRES_hash(const char* input, char* output, uint32_t len);
 void yespowerSUGAR_hash(const char* input, char* output, uint32_t len);
 void yespowerURX_hash(const char* input, char* output, uint32_t len);
 
