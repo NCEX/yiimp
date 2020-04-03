@@ -525,8 +525,8 @@ bool client_submit(YAAMP_CLIENT *client, json_value *json_params)
 
 	if(strcmp(ntime, templ->ntime))
 	{
-		if (!ntime_valid_range(ntime)) {
-			client_submit_error(client, job, 23, "Invalid time rolling", extranonce2, ntime, nonce);
+		if (!ishexa(ntime, 8)) {
+			client_submit_error(client, job, 23, "Invalid ntime", extranonce2, ntime, nonce);
 			return true;
 		}
 		// dont allow algos permutations change over time (can lead to different speeds)
@@ -610,7 +610,7 @@ bool client_submit(YAAMP_CLIENT *client, json_value *json_params)
 
         // bit dim, but so is measuring the diff this way
         uint64_t user_target;
-	uint64_t hash_int = get_hash_difficulty(submitvalues.hash_bin);
+		uint64_t hash_int = get_hash_difficulty(submitvalues.hash_bin);
         uint64_t coin_target = decode_compact(templ->nbits);
         uint64_t hashcomb = * (uint64_t *) &submitvalues.hash_bin[24];
 
@@ -763,8 +763,8 @@ bool client_submit_res(YAAMP_CLIENT *client, json_value *json_params)
 
 	if(strcmp(ntime, templ->ntime))
 	{
-		if (!ishexa(ntime, 8) || !ntime_valid_range(ntime)) {
-			client_submit_error(client, job, 23, "Invalid time rolling", extranonce2, ntime, nonce);
+		if (!ishexa(ntime, 8)) {
+			client_submit_error(client, job, 23, "Invalid ntime", extranonce2, ntime, nonce);
 			return true;
 		}
 		// dont allow algos permutations change over time (can lead to different speeds)
