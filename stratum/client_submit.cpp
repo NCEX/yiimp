@@ -452,18 +452,6 @@ void client_submit_error(YAAMP_CLIENT *client, YAAMP_JOB *job, int id, const cha
 	object_unlock(job);
 }
 
-static bool ntime_valid_range(const char ntimehex[])
-{
-	time_t rawtime = 0;
-	uint32_t ntime = 0;
-	if (strlen(ntimehex) != 8) return false;
-	sscanf(ntimehex, "%8x", &ntime);
-	if (ntime < 0x5b000000 || ntime > 0x60000000) // 14 Jan 2021
-		return false;
-	time(&rawtime);
-	return (abs(rawtime - ntime) < (30 * 60));
-}
-
 bool client_submit(YAAMP_CLIENT *client, json_value *json_params)
 {
         bool isBalloon = false;
