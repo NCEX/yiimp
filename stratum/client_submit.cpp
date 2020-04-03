@@ -586,36 +586,16 @@ bool client_submit(YAAMP_CLIENT *client, json_value *json_params)
 		lyra2z_height = templ->height;
 	}
 
-	// minimum hash diff begins with 0000, for all...
-	uint8_t pfx = submitvalues.hash_bin[30] | submitvalues.hash_bin[31];
+        uint64_t hash_int = * (uint64_t *) &submitvalues.hash_bin[24];
+        uint64_t user_target = share_to_target(client->difficulty_actual) * g_current_algo->diff_multiplier;
+        uint64_t coin_target = decode_compact(templ->nbits) / 0x10000;
 
-    if(pfx) {
-		if (g_debuglog_hash) {
-			debuglog("Possible %s error, hash starts with %02x%02x%02x%02x\n", g_current_algo->name,
-				(int) submitvalues.hash_bin[31], (int) submitvalues.hash_bin[30],
-				(int) submitvalues.hash_bin[29], (int) submitvalues.hash_bin[28]);
-                }
-		client_submit_error(client, job, 25, "Invalid share", extranonce2, ntime, nonce);
-		return true;
-	}
+        debuglog("hash %016lx \n", hash_int);
+        debuglog("shar %016lx \n", user_target);
+        debuglog("coin %016lx \n", coin_target);   
 
-        // bit dim, but so is measuring the diff this way
-        uint64_t user_target;
-		uint64_t hash_int = get_hash_difficulty(submitvalues.hash_bin);
-        uint64_t coin_target = decode_compact(templ->nbits);
-        
-        // prevents overflow
-        if(templ->nbits && !coin_target) coin_target = 0xFFFF000000000000ULL;
 
-        // due to balloon's lower diff
-        
-	if (g_debuglog_hash) {
-		debuglog("%016llx actual\n", hash_int);
-		debuglog("%016llx target\n", user_target);
-		debuglog("%016llx coin\n", coin_target);
-	}
-
-    if(hash_int > user_target && hash_int > coin_target)
+    if(hash_int > user_target)
 	{
 		client_submit_error(client, job, 26, "Low difficulty share", extranonce2, ntime, nonce);
 		return true;
