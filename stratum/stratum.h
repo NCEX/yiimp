@@ -171,7 +171,6 @@ void sha256_double_hash_hex(const char *input, char *output, unsigned int len);
 #include "algos/fresh.h"
 #include "algos/hsr14.h"
 #include "algos/quark.h"
-#include "algos/balloon.h"
 #include "algos/bcd.h"
 #include "algos/neoscrypt.h"
 #include "algos/allium.h"
