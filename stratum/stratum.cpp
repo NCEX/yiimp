@@ -196,6 +196,7 @@ YAAMP_ALGO g_algos[] =
 	{"yescryptR32", yescryptR32_hash, 0x10000, 0, 0 },
 	
 	{"yespower", yespower_hash, 0x10000, 0, 0 },
+	{"yespowerIC", yespowerIC_hash, 0x10000, 0, 0 }, //IsotopeC[IC]
 	{"yespowerR16", yespowerR16_hash, 0x10000, 0, 0 },
 	{"yespowerRES", yespowerRES_hash, 0x10000, 0, 0 }, //Resistanse[RES] 
 	{"yespowerSUGAR", yespowerSUGAR_hash, 0x10000, 0, 0 }, //Sugarchain[SUGAR] 

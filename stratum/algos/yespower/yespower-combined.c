@@ -1155,6 +1155,18 @@ void yespower_hash(const char* input, char* output, uint32_t len)
     yespower_tls(input, 80, &yespower_1_0, (yespower_binary_t *)output);
 }
 
+void yespowerIC_hash(const char* input, char* output, uint32_t len)
+{
+    yespower_params_t yespower_1_0_isotopec = {
+        .version = YESPOWER_1_0,
+        .N = 2048,
+        .r = 32,
+        .pers = (const uint8_t *)"IsotopeC",
+        .perslen = 8
+    };
+    yespower_tls(input, 80, &yespower_1_0_isotopec, (yespower_binary_t *)output);
+}
+
 void yespowerR16_hash(const char* input, char* output, uint32_t len)
 {
     yespower_params_t yespower_1_0_r16 = {
