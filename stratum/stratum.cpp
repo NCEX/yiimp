@@ -198,6 +198,8 @@ YAAMP_ALGO g_algos[] =
 	{"yespower", yespower_hash, 0x10000, 0, 0 },
 	{"yespowerR16", yespowerR16_hash, 0x10000, 0, 0 },
 	{"yespowerRES", yespowerRES_hash, 0x10000, 0, 0 }, //Resistanse[RES] 
+	{"yespowerSUGAR", yespowerSUGAR_hash, 0x10000, 0, 0 }, //Sugarchain[SUGAR] 
+	{"yespowerURX", yespowerURX_hash, 0x10000, 0, 0 }, //UraniumX[URX] 
 	
 	
 	{"zr5", zr5_hash, 1, 0, 0},
