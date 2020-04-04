@@ -1167,6 +1167,18 @@ void yespowerIC_hash(const char* input, char* output, uint32_t len)
     yespower_tls(input, 80, &yespower_1_0_isotopec, (yespower_binary_t *)output);
 }
 
+void yespowerIOTS_hash(const char* input, char* output, uint32_t len)
+{
+    yespower_params_t yespower_1_0_iots = {
+        .version = YESPOWER_1_0,
+        .N = 2048,
+        .r = 32,
+        .pers = (const uint8_t *)"Iots is committed to the development of IOT",
+        .perslen = 43
+    };
+    yespower_tls(input, 80, &yespower_1_0_iots, (yespower_binary_t *)output);
+}
+
 void yespowerR16_hash(const char* input, char* output, uint32_t len)
 {
     yespower_params_t yespower_1_0_r16 = {
@@ -1188,7 +1200,7 @@ void yespowerRES_hash(const char* input, char* output, uint32_t len)
         .pers = NULL,
         .perslen = 0
     };
-    yespower_tls(input, 80, &yespower_1_0_resistance, (yespower_binary_t *)output);
+    yespower_tls(input, 140, &yespower_1_0_resistance, (yespower_binary_t *)output);
 }
 
 void yespowerSUGAR_hash(const char* input, char* output, uint32_t len)
