@@ -59,8 +59,6 @@ $payout_freq = (YAAMP_PAYMENTS_FREQ / 3600) . " hours";
 		<tr>
 			<th>Stratum Location</th>
 			<th>Coin</th>
-			<th>Wallet Address</th>
-			<th>Rig Name</th>
 		</tr>
 	</thead>
 
@@ -112,6 +110,15 @@ $payout_freq = (YAAMP_PAYMENTS_FREQ / 3600) . " hours";
 			</select>
 		</td>
 
+</tbody>
+<thead>
+		<tr>
+			<th>Wallet Address</th>
+			<th>Rig Name</th>
+		</tr>
+</thead>
+<tbody>
+	<tr>
 		<td>
 
 <!-- Change your demo wallet here -->
@@ -130,7 +137,8 @@ $payout_freq = (YAAMP_PAYMENTS_FREQ / 3600) . " hours";
 			<td colspan="5"><p class="main-left-box" style="padding: 3px; background-color: #ffffee; font-family: monospace;" id="output">-a  -o stratum+tcp://stratum.domain:0000 -u . -p c=</p>
 		</td>
 	</tr>
-</tbody></table>
+</tbody>
+</table>
 
 <ul>
 <li>&lt;WALLET_ADDRESS&gt; must be valid for the currency you mine. <b>DO NOT USE a BTC address here, the auto exchange is disabled on these stratums</b>!</li>
