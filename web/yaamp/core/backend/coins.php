@@ -9,9 +9,9 @@ function string_to_hashrate($s)
 {
 	$value = floatval(trim(preg_replace('/,/', '', $s)));
 
-	if(stripos($s, 'kh/s')) $value *= 1000;
-	if(stripos($s, 'mh/s')) $value *= 1000000;
-	if(stripos($s, 'gh/s')) $value *= 1000000000;
+	if(stripos($s, 'Kh/s')) $value *= 1000;
+	if(stripos($s, 'Mh/s')) $value *= 1000000;
+	if(stripos($s, 'Gh/s')) $value *= 1000000000;
 
 	return $value;
 }
@@ -125,12 +125,13 @@ function BackendCoinsUpdate()
 				$coin->auxpow = true;
 		}
 
-//		if($coin->symbol != 'BTC')
-//		{
-//			if($coin->symbol == 'PPC')
-//				$template = $remote->getblocktemplate('');
-//			else
-			$template = $remote->getblocktemplate('{}');
+        // Change for segwit
+        if ($coin->usesegwit) {
+            $template = $remote->getblocktemplate('{"rules":["segwit"]}');
+        } else {
+            $template = $remote->getblocktemplate('{}');
+        }
+        // Change for segwit end
 
 			if($template && isset($template['coinbasevalue']))
 			{
@@ -168,6 +169,15 @@ function BackendCoinsUpdate()
 						$coin->reward -= arraySafeVal($template['evolution'],'amount',10000000)/100000000;
 					}
            		}
+				
+				else if($coin->symbol == 'IOTS') 
+				{
+                    if(isset($template['masternode'])) 
+					{
+						if (arraySafeVal($template,'masternode_payments_started'))
+						$coin->reward -= arraySafeVal($template['masternode'],'amount',0)/100000000;
+					}
+				}				
 				
 				else if(!empty($coin->charity_address)) {
 					if(!$coin->charity_amount)
