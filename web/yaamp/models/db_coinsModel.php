@@ -51,9 +51,11 @@ class db_coins extends CActiveRecord
 			'hassubmitblock'=> 'Has submitblock',
 			'hasmasternodes'=> 'Masternodes',
 			'usesegwit'	=> 'Use segwit',
+			'usefaucet'	=> 'Use Faucet',
 			'market'	=> 'Preferred market',
 			'rpcencoding'	=> 'RPC Type',
-			'specifications'=> 'Notes'
+			'dedicatedport'	=> 'Dedicated Port',
+			'specifications'=> 'Additional Config Parameters'
 		);
 	}
 
@@ -122,4 +124,3 @@ class db_coins extends CActiveRecord
 	}
 
 }
-

@@ -28,19 +28,23 @@ $payout_freq = (YAAMP_PAYMENTS_FREQ / 3600)." hours";
 <!--  -->
 
 <div class="main-left-box">
-<div class="main-left-title">YII MINING POOLS</div>
+<div class="main-left-title">PoolMine.xyz</div>
 <div class="main-left-inner">
 
 <ul>
 
-<li>YiiMP is a pool management solution based on the Yii Framework.</li>
-<li>This fork was based on the yaamp source code and is now an open source project.</li>
+<li >Welcome to PoolMine.xyz</li>
+<li>&nbsp;</li>
+<li><img src="/images/Logo.png" alt="image" /> <br/></li>
+<li>&nbsp;</li>
 <li>No registration is required, we do payouts in the currency you mine. Use your wallet address as the username.</li>
 <li>&nbsp;</li>
 <li>Payouts are made automatically every <?= $payout_freq ?> for all balances above <b><?= $min_payout ?></b>, or <b><?= $min_sunday ?></b> on Sunday.</li>
 <li>For some coins, there is an initial delay before the first payout, please wait at least 6 hours before asking for support.</li>
 <li>Blocks are distributed proportionally among valid submitted shares.</li>
-
+<li>&nbsp;</li>
+<li>&nbsp;</li>
+<div>Use cpuminer-opt-rplant for mining Ring coin  <a href='https://github.com/rplant8/cpuminer-opt-rplant/releases/'> /github/cpuminer-opt-rplant </a></div>
 <br/>
 
 </ul>
@@ -50,21 +54,100 @@ $payout_freq = (YAAMP_PAYMENTS_FREQ / 3600)." hours";
 <!--  -->
 
 <div class="main-left-box">
-<div class="main-left-title">STRATUM SERVERS</div>
+<div class="main-left-title">Miner Downloads</div>
+<div class="main-left-inner">
+<table>
+  <tr>
+    <td>
+	<a href="https://github.com/rplant8/cpuminer-opt-rplant/releases/" target="_blank">cpuminer-rplant</a><br />
+	<a href="https://github.com/doktor83/SRBMiner-Multi/releases/" target="_blank">SRBMiner-Multi</a><br />
+	<a href="https://github.com/uspenko/cpuminer-multi/releases/" target="_blank">cpuminer-minotaur</a><br />
+  	</td><td></td>
+    <td>
+      	<br />
+	</td><td></td>
+    <td>
+	  
+    <td>
+      </td>
+	</td>
+  </tr>
+</table>
+</div></div>
+<br/>
+
+<!--  -->
+
+<div class="main-left-box">
+<div class="main-left-title">How to mine with PoolMine.xyz</div>
 <div class="main-left-inner">
 
 <ul>
+<table>
+<thead>
+<tr>
+<th>Miner</th>
+<th>Stratum Region</th>
+<th>Coin</th>
+<th>Send BenchMark</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>
+<select id="drop-miner" >
+	<option value="" disabled selected>Windows</option>
+	<option value="cpuminer-sse2.exe">cpuminer-rplant</option>
+	<option value="" disabled selected>Linux</option>
+	<option value="./cpuminer">cpuminer-minotaur</option>
+	</select>
+</td>
+<td>
+<select id="drop-stratum" >
+	<option value="region" disabled selected>Region</option>
+	<option value="asia">ASIA</option>
+	<option value="na">North America</option>
+</select>
+</td>
+<td>
+<select id="drop-coin">
+<option data-port='port' data-algo="-a algo" data-symbol='symbol' disabled selected>Coin</option>
+<option data-port='7018' data-algo='-a minotaur' data-symbol='RNG'>Ring (RNG)</option>
+<option data-port='6235' data-algo='-a yespowerIC' data-symbol='ISO'>IsotopeC (ISO)</option>
+<option data-port='6236' data-algo='-a yespowerr16' data-symbol='YTN'>Yenten (YTN)</option>
+</select>
+</td>
+<td>
+<select id="drop-bench">
+	<option value="">No</option>
+	<option value=",stats">Yes</option>
+</select>
+</td>
+<thead>
+<tr>
+<th>Wallet Address</th>
+<th>Rig Name</th>
+</tr>
+</thead>
 
-<li>
-<p class="main-left-box" style='padding: 3px; font-size: .8em; background-color: #ffffee; font-family: monospace;'>
-	-o stratum+tcp://<?= YAAMP_STRATUM_URL ?>:&lt;PORT&gt; -u &lt;WALLET_ADDRESS&gt; [-p &lt;OPTIONS&gt;]</p>
-</li>
+<td>
+<input id="text-wallet" type="text" placeholder="<Your-Wallet-Address>">
+</td><td>
+<input id="text-rig-name" type="text" placeholder="Rig-Name">
+</td>
+<td>
+<input id="Generate!" type="button" value="Generate Command " onclick="generate()">
+</td>
+</tr>
+<tr>
+<td colspan="5">
+<li>&nbsp;</li>
+<li>Use Command line</li>
+<p class="main-left-box" style="padding: 3px; background-color: #ffffee; font-family: monospace;" id="output">-a &lt;Algo&gt; -o stratum+tcp://&lt;Region&gt;.poolmine.xyz.com:&lt;PORT&gt; -u &lt;WALLET_ADDRESS&gt;.&lt;WORKER_NAME&gt; -p c=&lt;SYMBOL&gt;</p>
+</td>
+</tr>
+</tbody></table>
 
-<?php if (YAAMP_ALLOW_EXCHANGE): ?>
-<li>&lt;WALLET_ADDRESS&gt; can be one of any currency we mine or a BTC address.</li>
-<?php else: ?>
 <li>&lt;WALLET_ADDRESS&gt; should be valid for the currency you mine. <b>DO NOT USE a BTC address here, the auto exchange is disabled</b>!</li>
-<?php endif; ?>
 <li>As optional password, you can use <b>-p c=&lt;SYMBOL&gt;</b> if yiimp does not set the currency correctly on the Wallet page.</li>
 <li>See the "Pool Status" area on the right for PORT numbers. Algorithms without associated coins are disabled.</li>
 
@@ -164,3 +247,29 @@ function pool_history_refresh()
 
 </script>
 
+<script>
+function getLastUpdated(){
+	var drop1 = document.getElementById('drop-stratum');
+	var drop2 = document.getElementById('drop-coin');
+	var drop3 = document.getElementById('drop-miner');
+	var drop4 = document.getElementById('drop-bench');
+	var rigName = document.getElementById('text-rig-name').value;
+	var result = '';
+
+	result += drop3.value  + ' ';
+	result += drop2.options[drop2.selectedIndex].dataset.algo + ' -o stratum+tcp://';
+	result += drop1.value + '.poolmine.xyz:';
+	result += drop2.options[drop2.selectedIndex].dataset.port + ' -u ';
+	result += document.getElementById('text-wallet').value;
+	if (rigName) result += '.' + rigName;
+	result += ' -p c=';
+	result += drop2.options[drop2.selectedIndex].dataset.symbol;
+	if (drop4) result += drop4.value;
+	return result;
+}
+function generate(){
+  	var result = getLastUpdated()
+		document.getElementById('output').innerHTML = result;
+}
+generate();
+</script>

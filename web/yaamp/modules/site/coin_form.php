@@ -32,13 +32,13 @@ echo '<div id="tabs-1">';
 echo CUFHtml::openActiveCtrlHolder($coin, 'name');
 echo CUFHtml::activeLabelEx($coin, 'name');
 echo CUFHtml::activeTextField($coin, 'name', array('maxlength'=>200));
-echo '<p class="formHint2"></p>';
+echo '<p class="formHint2">Required</p>';
 echo CUFHtml::closeCtrlHolder();
 
 echo CUFHtml::openActiveCtrlHolder($coin, 'symbol');
 echo CUFHtml::activeLabelEx($coin, 'symbol');
 echo CUFHtml::activeTextField($coin, 'symbol', array('maxlength'=>200,'style'=>'width: 120px;'));
-echo '<p class="formHint2"></p>';
+echo '<p class="formHint2">Required all upper case</p>';
 echo CUFHtml::closeCtrlHolder();
 
 echo CUFHtml::openActiveCtrlHolder($coin, 'symbol2');
@@ -50,7 +50,7 @@ echo CUFHtml::closeCtrlHolder();
 echo CUFHtml::openActiveCtrlHolder($coin, 'algo');
 echo CUFHtml::activeLabelEx($coin, 'algo');
 echo CUFHtml::activeTextField($coin, 'algo', array('maxlength'=>64,'style'=>'width: 120px;'));
-echo '<p class="formHint2">Mining algorithm</p>';
+echo '<p class="formHint2">Required all lower case</p>';
 echo CUFHtml::closeCtrlHolder();
 
 echo CUFHtml::openActiveCtrlHolder($coin, 'image');
@@ -112,11 +112,6 @@ echo CUFHtml::activeLabelEx($coin, 'errors');
 echo CUFHtml::activeTextField($coin, 'errors', array('maxlength'=>200,'readonly'=>'readonly','style'=>'width: 600px;'));
 echo CUFHtml::closeCtrlHolder();
 
-echo CUFHtml::openActiveCtrlHolder($coin, 'specifications');
-echo CUFHtml::activeLabelEx($coin, 'specifications');
-echo CUFHtml::activeTextArea($coin, 'specifications', array('maxlength'=>2048,'lines'=>5,'class'=>'tweetnews-input','style'=>'width: 600px;'));
-echo CUFHtml::closeCtrlHolder();
-
 echo "</div>";
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -126,7 +121,7 @@ echo '<div id="tabs-2">';
 echo CUFHtml::openActiveCtrlHolder($coin, 'enable');
 echo CUFHtml::activeLabelEx($coin, 'enable');
 echo CUFHtml::activeCheckBox($coin, 'enable');
-echo '<p class="formHint2"></p>';
+echo '<p class="formHint2">Required</p>';
 echo CUFHtml::closeCtrlHolder();
 
 echo CUFHtml::openActiveCtrlHolder($coin, 'auto_ready');
@@ -271,24 +266,6 @@ if (empty($coin->price) || empty($coin->market) || $coin->market == 'unknown') {
 
 }
 
-//echo CUFHtml::openActiveCtrlHolder($coin, 'marketid');
-//echo CUFHtml::activeLabelEx($coin, 'marketid');
-//echo CUFHtml::activeTextField($coin, 'marketid', array('maxlength'=>20,'style'=>'width: 120px;'));
-//echo "<p class='formHint2'>Required on cryptsy ?</p>";
-//echo CUFHtml::closeCtrlHolder();
-
-//echo CUFHtml::openActiveCtrlHolder($coin, 'deposit_address');
-//echo CUFHtml::activeLabelEx($coin, 'deposit_address');
-//echo CUFHtml::activeTextField($coin, 'deposit_address', array('maxlength'=>20));
-//echo "<p class='formHint2'>For donations or exchange withdraws ?</p>";
-//echo CUFHtml::closeCtrlHolder();
-
-//echo CUFHtml::openActiveCtrlHolder($coin, 'deposit_minimum');
-//echo CUFHtml::activeLabelEx($coin, 'deposit_minimum');
-//echo CUFHtml::activeTextField($coin, 'deposit_minimum', array('maxlength'=>20,'style'=>'width: 120px;'));
-//echo "<p class='formHint2'>Unused</p>";
-//echo CUFHtml::closeCtrlHolder();
-
 echo '</div>';
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -298,19 +275,30 @@ echo '<div id="tabs-4">';
 echo CUFHtml::openActiveCtrlHolder($coin, 'program');
 echo CUFHtml::activeLabelEx($coin, 'program');
 echo CUFHtml::activeTextField($coin, 'program', array('maxlength'=>128,'style'=>'width: 180px;'));
-echo '<p class="formHint2">Daemon process name</p>';
+echo '<p class="formHint2">Daemon Name - I.e. bitcoind</p>';
 echo CUFHtml::closeCtrlHolder();
 
+if(empty($coin->program)){
 echo CUFHtml::openActiveCtrlHolder($coin, 'conf_folder');
 echo CUFHtml::activeLabelEx($coin, 'conf_folder');
-echo CUFHtml::activeTextField($coin, 'conf_folder', array('maxlength'=>128,'style'=>'width: 180px;'));
-echo '<p class="formHint2">Generally close to the process name (.bitcoin)</p>';
-echo CUFHtml::closeCtrlHolder();
+echo CUFHtml::activeTextField($coin, 'conf_folder', array('maxlength'=>228,'readonly'=>'readonly'));
+echo '<p class="formHint2">Field will automatically update on save.</p>';
+echo CUFHtml::closeCtrlHolder();}
+
+else
+if(empty($coin->conf_folder)){
+$program = substr($coin->program, 0, -1);
+$coin->conf_folder = "/home/crypto-data/wallets/.$program";
+echo CUFHtml::openActiveCtrlHolder($coin, 'conf_folder');
+echo CUFHtml::activeLabelEx($coin, 'conf_folder');
+echo CUFHtml::activeTextField($coin, 'conf_folder', array('maxlength'=>228,'readonly'=>'readonly'));
+echo '<p class="formHint2">Field will automatically update on save.</p>';
+echo CUFHtml::closeCtrlHolder();}
 
 echo CUFHtml::openActiveCtrlHolder($coin, 'rpchost');
 echo CUFHtml::activeLabelEx($coin, 'rpchost');
 echo CUFHtml::activeTextField($coin, 'rpchost', array('maxlength'=>128,'style'=>'width: 180px;'));
-echo '<p class="formHint2">Daemon (Wallet) IP</p>';
+echo '<p class="formHint2">I.e. 127.0.0.1</p>';
 echo CUFHtml::closeCtrlHolder();
 
 if(empty($coin->rpcport))
@@ -319,7 +307,7 @@ if(empty($coin->rpcport))
 echo CUFHtml::openActiveCtrlHolder($coin, 'rpcport');
 echo CUFHtml::activeLabelEx($coin, 'rpcport');
 echo CUFHtml::activeTextField($coin, 'rpcport', array('maxlength'=>5,'style'=>'width: 60px;'));
-echo '<p class="formHint2"></p>';
+echo '<p class="formHint2">AutoGenerated</p>';
 echo CUFHtml::closeCtrlHolder();
 
 if(empty($coin->rpcuser))
@@ -328,7 +316,7 @@ if(empty($coin->rpcuser))
 echo CUFHtml::openActiveCtrlHolder($coin, 'rpcuser');
 echo CUFHtml::activeLabelEx($coin, 'rpcuser');
 echo CUFHtml::activeTextField($coin, 'rpcuser', array('maxlength'=>128,'style'=>'width: 180px;'));
-echo '<p class="formHint2"></p>';
+echo '<p class="formHint2">AutoGenerated</p>';
 echo CUFHtml::closeCtrlHolder();
 
 // generate a random password
@@ -338,13 +326,13 @@ if(empty($coin->rpcpasswd))
 echo CUFHtml::openActiveCtrlHolder($coin, 'rpcpasswd');
 echo CUFHtml::activeLabelEx($coin, 'rpcpasswd');
 echo CUFHtml::activeTextField($coin, 'rpcpasswd', array('maxlength'=>128));
-echo '<p class="formHint2"></p>';
+echo '<p class="formHint2">AutoGenerated</p>';
 echo CUFHtml::closeCtrlHolder();
 
 echo CUFHtml::openActiveCtrlHolder($coin, 'serveruser');
 echo CUFHtml::activeLabelEx($coin, 'serveruser');
 echo CUFHtml::activeTextField($coin, 'serveruser', array('maxlength'=>35,'style'=>'width: 180px;'));
-echo '<p class="formHint2">Daemon process username</p>';
+echo '<p class="formHint2">Leave Blank</p>';
 echo CUFHtml::closeCtrlHolder();
 
 echo CUFHtml::openActiveCtrlHolder($coin, 'rpcencoding');
@@ -374,51 +362,109 @@ echo CUFHtml::closeCtrlHolder();
 echo CUFHtml::openActiveCtrlHolder($coin, 'account');
 echo CUFHtml::activeLabelEx($coin, 'account');
 echo CUFHtml::activeTextField($coin, 'account', array('maxlength'=>128,'style'=>'width: 180px;'));
-echo '<p class="formHint2">Wallet account to use</p>';
+echo '<p class="formHint2">Leave Blank</p>';
 echo CUFHtml::closeCtrlHolder();
 
-if ($coin->id) {
-	echo CHtml::tag("hr");
-	echo "<b>Sample config</b>:";
-	echo CHtml::opentag("pre");
-	$port = getAlgoPort($coin->algo);
-	echo "rpcuser={$coin->rpcuser}\n";
-	echo "rpcpassword={$coin->rpcpasswd}\n";
-	echo "rpcport={$coin->rpcport}\n";
-	echo "rpcthreads=8\n";
-	echo "rpcallowip=127.0.0.1\n";
-	echo "# onlynet=ipv4\n";
-	echo "maxconnections=12\n";
-	echo "daemon=1\n";
-	echo "gen=0\n";
-	echo "\n";
-	echo "alertnotify=echo %s | mail -s \"{$coin->name} alert!\" ".YAAMP_ADMIN_EMAIL."\n";
-	echo "blocknotify=blocknotify ".YAAMP_STRATUM_URL.":$port {$coin->id} %s\n";
-	echo CHtml::closetag("pre");
+echo CUFHtml::openActiveCtrlHolder($coin, 'specifications');
+echo CUFHtml::activeLabelEx($coin, 'specifications');
+echo CUFHtml::activeTextArea($coin, 'specifications', array('maxlength'=>1048,'lines'=>35,'style'=>'width: 200px;'));
+echo "<p class='formHint2'>Additional Config Settings:<br>";
+echo "<br>";
+echo "deprecatedrpc=accounts<br>";
+echo "addnode=x.x.x.x<br>";
+echo "algo=x<br>";
+echo "<br>";
+echo "Max 35 line limit<br>";
+echo "<br>";
+echo "Once all new parameters are added, you need to hit save and reload the page for the autogenerated config to update.<br></p>";
+echo CUFHtml::closeCtrlHolder();
 
-	echo CHtml::tag("hr");
-	echo "<b>Miner command line</b>:";
-	echo CHtml::opentag("pre");
-	echo "-a {$coin->algo} ";
-	echo "-o stratum+tcp://".YAAMP_STRATUM_URL.':'.$port.' ';
-	echo "-u {$coin->master_wallet} ";
-	echo "-p c={$coin->symbol} ";
-	echo "\n";
-	echo CHtml::closetag("pre");
+if(empty($coin->id))
+if(empty($coin->program)){
+echo CHtml::tag("hr");
+echo "Configuration information will be displayed after Process Name is entered and saved. Please reload page once completed.\n";
+}
+
+if ($coin->id) {
+if(empty($coin->program)){
+echo CHtml::tag("hr");
+echo "Configuration information will be displayed after Process Name is entered and saved. Please reload page once completed.\n";
+}
+else    {
+$program = substr($coin->program, 0, -1);
+echo CHtml::tag("hr");
+echo "<b>Autogenerated config - if using daemonbuilder copy from rpcuser through blocknotify line</b>\n";
+echo "<b>If you manually built a coin without daemonbuilder, copy this entire section</b>:\n";
+echo CHtml::opentag("pre");
+echo "mkdir -p {$coin->conf_folder}\n";
+$port = getAlgoPort($coin->algo);
+echo "echo '\n";
+echo " \n";
+echo "rpcuser={$coin->rpcuser}\n";
+echo "rpcpassword={$coin->rpcpasswd}\n";
+echo "rpcport={$coin->rpcport}\n";
+echo "rpcthreads=64\n";
+echo "rpcallowip=127.0.0.1\n";
+echo "# onlynet=ipv4\n";
+echo "maxconnections=12\n";
+echo "daemon=1\n";
+echo "gen=0\n";
+if(empty($coin->specifications)){
+echo "\n";
+}
+else {
+echo "{$coin->specifications}\n";
+echo "\n";
+}
+echo "alertnotify=echo %s | mail -s \"{$coin->name} alert!\" ".YAAMP_ADMIN_EMAIL."\n";
+echo "blocknotify=blocknotify.sh $port {$coin->id} %s\n";
+echo " \n";
+echo "' | sudo -E tee {$coin->conf_folder}/$program.conf >/dev/null 2>&1\n";
+echo CHtml::closetag("pre");
+
+echo CHtml::tag("hr");
+echo "<b>Add coind to system startup (cron)</b>:";
+echo CHtml::opentag("pre");
+echo "(crontab -l 2>/dev/null; echo \"@reboot sleep 60 && {$coin->program} -datadir={$coin->conf_folder} -conf=$program.conf -daemon -shrinkdebugfile\") | crontab -\n";
+echo "\n";
+echo '<p class="formHint2">add -reindex if coin fails to start.</p>';
+echo CHtml::closetag("pre");
+
+echo CHtml::tag("hr");
+echo "<b>Daemon Commands</b>:";
+echo "<b>You MUST use this format or coins will not work!</b>:";
+echo CHtml::opentag("pre");
+echo "To START a coind:\n";
+echo "{$coin->program} -datadir={$coin->conf_folder} -conf=$program.conf -daemon -shrinkdebugfile\n\n";
+echo "To STOP a coind:\n";
+echo "{$coin->program} -datadir={$coin->conf_folder} -conf=$program.conf stop\n\n";
+echo "Or if your coin has a -cli (bitcoin-cli) file...\n";
+echo "$program-cli -datadir={$coin->conf_folder} -conf=$program.conf stop\n\n";
+echo "To run other CLI functions:\n";
+echo "$program-cli -datadir={$coin->conf_folder} -conf=$program.conf help\n\n";
+echo " \n";
+echo "To edit the coin.config file:\n";
+echo "sudo nano {$coin->conf_folder}/$program.conf\n";
+echo CHtml::closetag("pre");
+
+echo CHtml::tag("hr");
+echo "<b>Miner command line</b>:";
+echo CHtml::opentag("pre");
+echo "-a {$coin->algo} ";
+echo "-o stratum+tcp://".YAAMP_STRATUM_URL.':'.$port.' ';
+echo "-u {$coin->master_wallet} ";
+echo "-p c={$coin->symbol} ";
+echo "\n";
+echo CHtml::closetag("pre");}
 }
 
 echo "</div>";
 
 
+
 //////////////////////////////////////////////////////////////////////////////////////////
 
 echo '<div id="tabs-5">';
-
-echo CUFHtml::openActiveCtrlHolder($coin, 'link_bitcointalk');
-echo CUFHtml::activeLabelEx($coin, 'link_bitcointalk');
-echo CUFHtml::activeTextField($coin, 'link_bitcointalk');
-echo "<p class='formHint2'></p>";
-echo CUFHtml::closeCtrlHolder();
 
 echo CUFHtml::openActiveCtrlHolder($coin, 'link_github');
 echo CUFHtml::activeLabelEx($coin, 'link_github');
@@ -429,6 +475,30 @@ echo CUFHtml::closeCtrlHolder();
 echo CUFHtml::openActiveCtrlHolder($coin, 'link_site');
 echo CUFHtml::activeLabelEx($coin, 'link_site');
 echo CUFHtml::activeTextField($coin, 'link_site');
+echo "<p class='formHint2'></p>";
+echo CUFHtml::closeCtrlHolder();
+
+echo CUFHtml::openActiveCtrlHolder($coin, 'link_bitcointalk');
+echo CUFHtml::activeLabelEx($coin, 'link_bitcointalk');
+echo CUFHtml::activeTextField($coin, 'link_bitcointalk');
+echo "<p class='formHint2'></p>";
+echo CUFHtml::closeCtrlHolder();
+
+echo CUFHtml::openActiveCtrlHolder($coin, 'link_twitter');
+echo CUFHtml::activeLabelEx($coin, 'link_twitter');
+echo CUFHtml::activeTextField($coin, 'link_twitter');
+echo "<p class='formHint2'></p>";
+echo CUFHtml::closeCtrlHolder();
+
+echo CUFHtml::openActiveCtrlHolder($coin, 'link_facebook');
+echo CUFHtml::activeLabelEx($coin, 'link_facebook');
+echo CUFHtml::activeTextField($coin, 'link_facebook');
+echo "<p class='formHint2'></p>";
+echo CUFHtml::closeCtrlHolder();
+
+echo CUFHtml::openActiveCtrlHolder($coin, 'link_discord');
+echo CUFHtml::activeLabelEx($coin, 'link_discord');
+echo CUFHtml::activeTextField($coin, 'link_discord');
 echo "<p class='formHint2'></p>";
 echo CUFHtml::closeCtrlHolder();
 
@@ -452,6 +522,3 @@ echo "</div>";
 echo CUFHtml::closeTag('fieldset');
 showSubmitButton($update? 'Save': 'Create');
 echo CUFHtml::endForm();
-
-
-
