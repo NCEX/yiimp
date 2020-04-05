@@ -50,7 +50,7 @@ echo <<<end
 <th data-sorter="text">Coin</th>
 <th data-sorter="text">Address</th>
 <th data-sorter="numeric">Last</th>
-<th data-sorter="numeric" align="right">Miners</th>
+<th data-sorter="numeric" align="right">Workers</th>
 <th data-sorter="numeric" align="right">Hashrate</th>
 <th data-sorter="numeric" align="right">Bad</th>
 <th data-sorter="numeric" align="right">Blocks</th>

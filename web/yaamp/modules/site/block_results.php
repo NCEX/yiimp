@@ -123,6 +123,9 @@ foreach($db_blocks as $db_block)
 		$user = getdbo('db_accounts', $db_block->userid);
 		$finder = $user ? substr($user->username, 0, 7).'...' : '';
 	}
+	
+	$is_solo = getdbocount('db_workers', "algo=:algo and userid=:userid and password like '%m=solo%'", array(':algo'=>$db_block->algo,':userid'=>$db_block->userid));
+	
 	echo '<td>'.$finder.'</td>';
 	echo '<td style="font-size: .8em; font-family: monospace;">';
 	echo $coin->createExplorerLink($db_block->blockhash, array('hash'=>$db_block->blockhash));

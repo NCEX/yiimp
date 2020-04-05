@@ -104,11 +104,13 @@ if(count($workers))
 
 		$version = substr($worker->version, 0, 20);
 		$password = substr($worker->password, 0, 32);
+		
+		$name = $worker->worker;
 
 		$subscribe = Booltoa($worker->subscribe);
 
 		echo '<tr class="ssrow">';
-		echo '<td title="'.$worker->version.'">'.$version.'</td>';
+		echo '<td title="'.$worker->version.'"><b>Version:</b> '.$version.' <br> <b>Worker Name:</b> '.$name.' </td>';
 		if ($this->admin) echo "<td>{$worker->ip}</td>";
 		echo '<td title="'.$worker->password.'">'.$password.'</td>';
 		echo '<td>'.$worker->algo.'</td>';

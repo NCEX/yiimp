@@ -204,7 +204,22 @@ function updateRawcoins()
 			}
 		}
 	}
-	
+
+	if (!exchange_get('cryptrade', 'disabled')) {
+		$list = cryptrade_api_query('ticker');
+		if(is_array($list) && !empty($list))
+		{
+			dborun("UPDATE markets SET deleted=true WHERE name='cryptrade'");
+			foreach($list as $ticker) {
+				$e = explode('_', $ticker->id);
+				if (strtoupper($e[1]) !== 'BTC')
+					continue;
+				$symbol = strtoupper($e[0]);
+				updateRawCoin('cryptrade', $symbol);
+			}
+		}
+	}
+
 	if (!exchange_get('escodex', 'disabled')) {
 		$list = escodex_api_query('ticker');
 		if(is_array($list) && !empty($list))
@@ -418,6 +433,21 @@ function updateRawcoins()
 		}
 	}
 
+	if (!exchange_get('altmarkets', 'disabled')) {
+		$list = coinexchange_api_query('getmarkets');
+		if(isset($list->result) && !empty($list->result))
+		{
+			dborun("UPDATE markets SET deleted=true WHERE name='altmarkets'");
+			foreach($list->result as $item) {
+				if ($item->BaseCurrency != 'BTC')
+					continue;
+				$symbol = $item->MarketCurrency;
+				$label = objSafeVal($item, 'MarketCurrencyLong');
+				updateRawCoin('altmarkets', $symbol, $label);
+			}
+		}
+	}
+
 	//////////////////////////////////////////////////////////
 
 	$markets = dbocolumn("SELECT DISTINCT name FROM markets");
@@ -475,7 +505,7 @@ function updateRawCoin($marketname, $symbol, $name='unknown')
 			}
 		}
 
-		if (in_array($marketname, array('nova','askcoin','binance','bitz','coinexchange','coinsmarkets','cryptobridge','tradeogre','hitbtc'))) {
+		if (in_array($marketname, array('nova','askcoin','binance','bitz','coinexchange','coinsmarkets','cryptobridge','cryptrade','tradeogre','hitbtc'))) {
 			// don't polute too much the db with new coins, its better from exchanges with labels
 			return;
 		}

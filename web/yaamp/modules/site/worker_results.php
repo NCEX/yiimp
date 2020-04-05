@@ -119,11 +119,15 @@ foreach($workers as $worker)
 		':worker'=> $worker->id,
 		':algo'=> $algo
 	));
+	
 	$user_blocs = dboscalar("SELECT COUNT(id) as blocs FROM blocks WHERE userid=:user AND algo=:algo
 		AND time > (SELECT min(time) FROM workers WHERE algo=:algo)", array(
 		':user'=> $worker->userid,
 		':algo'=> $algo
 	));
+	
+	$is_solo = getdbocount('db_workers', "algo=:algo and userid=:userid and password like '%m=solo%'", array(':algo'=>$db_block->algo,':userid'=>$db_block->userid));
+	
 	echo '<td>'.number_format($percent,1,'.','').'%</td>';
 
 	echo '<td>'.$worker_blocs.' / '.$user_blocs.'</td>';
