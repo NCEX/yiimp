@@ -1,4 +1,5 @@
 <?php
+
 $exch = getparam('exch');
 echo getAdminSideBarLinks();
 
@@ -34,7 +35,7 @@ function main_error()
 
 function main_refresh()
 {
-	var url = '/site/balances_results?exch=<?php echo $exch; ?>';
+	var url = '/site/balances_results?exch=<?php echo $exch;?>';
 	clearTimeout(main_timeout);
 	$.get(url, '', main_ready).error(main_error);
 }
@@ -42,6 +43,5 @@ function main_refresh()
 </script>
 
 <?php
-app()
-    ->clientScript
-    ->registerScript('init', 'main_refresh();', CClientScript::POS_READY);
+
+app()->clientScript->registerScript('init', 'main_refresh();', CClientScript::POS_READY);

@@ -1,4 +1,5 @@
 <?php
+
 $algo = user()->getState('yaamp-algo');
 
 JavascriptFile("/extensions/jqplot/jquery.jqplot.js");
@@ -11,7 +12,7 @@ JavascriptFile('/yaamp/ui/js/auto_refresh.js');
 $this->widget('UniForm');
 
 $renter = getrenterparam(user()->getState('yaamp-deposit'));
-if (!$renter) return;
+if(!$renter) return;
 
 echo <<<end
 <style>
@@ -148,3 +149,8 @@ function graph_init_price(data)
 </script>
 
 end;
+
+
+
+
+

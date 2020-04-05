@@ -1,4 +1,5 @@
 <?php
+
 $algo = user()->getState('yaamp-algo');
 
 JavascriptFile("/extensions/jqplot/jquery.jqplot.js");
@@ -305,3 +306,13 @@ Address: <input type="text" name="withdraw_address" class="main-text-input" styl
 </div>
 
 END;
+
+
+
+
+
+
+
+
+
+

@@ -1,6 +1,6 @@
 <?php
 
-// see https://docs.kucoin.com/
+// see https://kucoinapidocs.docs.apiary.io/
 
 function kucoin_result_valid($obj, $method='')
 {
@@ -8,14 +8,14 @@ function kucoin_result_valid($obj, $method='')
 	return true;
 }
 
-// https://openapi-v2.kucoin.com/api/v1/symbols?market=BTC
-// https://openapi-v2.kucoin.com/api/v1/currencies for labels
+// https://api.kucoin.com/v1/open/symbols/?market=BTC
 
 function kucoin_api_query($method, $params='', $returnType='object')
 {
 	$exchange = 'kucoin';
-	$url = "https://openapi-v2.kucoin.com/api/v1/$method";
-	if (!empty($params)) $url .= "?$params";
+	$url = "https://api.kucoin.com/v1/$method/";
+	if (!empty($params))
+		$url .= "?$params";
 
 	$ch = curl_init($url);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -46,7 +46,7 @@ function kucoin_api_query($method, $params='', $returnType='object')
 	return $ret;
 }
 
-// https://openapi-v2.kucoin.com/api/v1/deposit-addresses?currency=<coin>
+// https://api.kucoin.com/v1/account/<coin>/wallet/address
 
 function kucoin_api_user($method, $params=NULL, $isPostMethod=false)
 {
@@ -55,33 +55,26 @@ function kucoin_api_user($method, $params=NULL, $isPostMethod=false)
 	if (!defined('EXCH_KUCOIN_SECRET')) define('EXCH_KUCOIN_SECRET', '');
 
 	if (empty(EXCH_KUCOIN_KEY) || empty(EXCH_KUCOIN_SECRET)) return false;
-	if (empty(EXCH_KUCOIN_PASSPHRASE)) return false;
 
-	$api_host = 'https://openapi-v2.kucoin.com';
+	$api_host = 'https://api.kucoin.com';
 	$mt = explode(' ', microtime());
 	$nonce = $mt[1].substr($mt[0], 2, 3);
-	$url = $endpoint = "/api/v1/$method";
+	$url = $endpoint = "/v1/$method";
+	$tosign = "$endpoint/$nonce/";
 
 	if (empty($params)) $params = array();
 	$query = http_build_query($params);
-	$body = "";
-	if ($isPostMethod)
-		$body = json_encode($params);
-	else if (strlen($query)) {
-		$body = '?'.$query;
-		$url .= $body;
+	if (strlen($query) && !$isPostMethod) {
+		$url .= '&'.$query; $query = '';
 	}
-
-	$req = $isPostMethod ? "POST" : "GET";
-	$tosign = "{$nonce}{$req}{$endpoint}{$body}";
-	$hmac = hash_hmac('sha256', $tosign, EXCH_KUCOIN_SECRET, true);
+	if ($isPostMethod) $post_data = $params;
+	$hmac = strtolower(hash_hmac('sha256', base64_encode($tosign.$query), EXCH_KUCOIN_SECRET));
 
 	$headers = array(
 		'Content-Type: application/json;charset=UTF-8',
 		'KC-API-KEY: '.EXCH_KUCOIN_KEY,
-		'KC-API-PASSPHRASE: '.EXCH_KUCOIN_PASSPHRASE,
-		'KC-API-TIMESTAMP: '.$nonce,
-		'KC-API-SIGN: '.base64_encode($hmac),
+		'KC-API-NONCE: '.$nonce,
+		'KC-API-SIGNATURE: '.$hmac,
 	);
 
 	$ch = curl_init();
@@ -90,7 +83,7 @@ function kucoin_api_user($method, $params=NULL, $isPostMethod=false)
 	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 	if ($isPostMethod) {
 		curl_setopt($ch, CURLOPT_POST, true);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
 	}
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
@@ -145,14 +138,14 @@ function kucoin_update_market($market)
 	}
 
 	$t1 = microtime(true);
-	$query = kucoin_api_query('market/orderbook/level1','symbol='.$pair);
+	$query = kucoin_api_query("$pair/open/tick");
 	if(!kucoin_result_valid($query)) return false;
 	$ticker = $query->data;
 
-	$price2 = ((double) $ticker->bestBid + (double)$ticker->bestAsk)/2;
+	$price2 = ((double) $ticker->buy + (double)$ticker->sell)/2;
 	$market->price2 = AverageIncrement($market->price2, $price2);
-	$market->price = AverageIncrement($market->price, $ticker->bestBid);
-	$market->pricetime = min(time(), 0 + $ticker->sequence);
+	$market->price = AverageIncrement($market->price, $ticker->buy);
+	$market->pricetime = time();
 	$market->save();
 
 	$apims = round((microtime(true) - $t1)*1000,3);

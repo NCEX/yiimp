@@ -1,11 +1,12 @@
 <?php
 
-// markets https://app.stex.com/api2/markets
-// prices https://app.stex.com/api2/ticker
+// markets https://stocks.exchange/api2/markets
+// prices https://stocks.exchange/api2/ticker
+// prices https://stocks.exchange/api2/prices (unused)
 
 function stocksexchange_api_query($method)
 {
-	$uri = "https://app.stex.com/api2/$method";
+	$uri = "https://stocks.exchange/api2/$method";
 
 	$ch = curl_init($uri);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -25,10 +26,9 @@ function stocksexchange_api_user($method, $params=array())
 
 	if (empty(EXCH_STOCKSEXCHANGE_KEY) || empty(EXCH_STOCKSEXCHANGE_SECRET)) return false;
 
-	$exchange = 'stocksexchange';
 	$mt = explode(' ', microtime());
 	$nonce = $mt[1].substr($mt[0], 2, 6);
-	$url = "https://app.stex.com/api2?method=$method&nonce=$nonce";
+	$url = "https://stocks.exchange/api2?method=$method&nonce=$nonce";
 
 	$sign_data = json_encode($params);
 	$sign = hash_hmac('sha512', $sign_data, EXCH_STOCKSEXCHANGE_SECRET);
@@ -57,7 +57,7 @@ function stocksexchange_api_user($method, $params=array())
 	$res = curl_exec($ch);
 	if($res === false) {
 		$e = curl_error($ch);
-		debuglog("$exchange: $e");
+		debuglog("stocksexchange: $e");
 		curl_close($ch);
 		return false;
 	}
@@ -66,9 +66,9 @@ function stocksexchange_api_user($method, $params=array())
 	if(!is_object($result) && !is_array($result)) {
 		$status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 		if (strpos($res,'Maintenance'))
-			debuglog("$exchange: $method failed (Maintenance)");
+			debuglog("stocksexchange: $method failed (Maintenance)");
 		else
-			debuglog("$exchange: $method failed ($status) ".strip_data($res));
+			debuglog("stocksexchange: $method failed ($status) ".strip_data($res));
 	}
 
 	curl_close($ch);

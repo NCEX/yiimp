@@ -1,68 +1,63 @@
 <?php
+
 class CommonController extends CController
 {
-    public $memcache;
-    public $t1;
+	public $memcache;
+	public $t1;
 
-    // read-only via getAdmin()
-    private $admin = false;
-    protected function getAdmin()
-    {
-        return $this->admin;
-    }
+	// read-only via getAdmin()
+	private $admin = false;
+	protected function getAdmin() { return $this->admin; }
 
-    protected function elapsedTime()
-    {
-        $t2 = microtime(true);
-        return ($t2 - $this->t1);
-    }
+	protected function elapsedTime()
+	{
+		$t2 = microtime(true);
+		return ($t2 - $this->t1);
+	}
 
-    protected function beforeAction($action)
-    {
-        //	debuglog("before action ".$action->getId());
-        $this->memcache = new YaampMemcache;
-        $this->t1 = microtime(true);
+	protected function beforeAction($action)
+	{
+	//	debuglog("before action ".$action->getId());
 
-        if (user()
-            ->getState('yaamp_admin'))
-        {
-            $this->admin = true;
-            $client_ip = arraySafeVal($_SERVER, 'REMOTE_ADDR');
-            if (!isAdminIP($client_ip))
-            {
-                user()->setState('yaamp_admin', false);
-                debuglog("admin attempt from $client_ip");
-                $this->admin = false;
-            }
-        }
+		$this->memcache = new YaampMemcache;
+		$this->t1 = microtime(true);
 
-        $algo = user()->getState('yaamp-algo');
-        if (!$algo) user()->setState('yaamp-algo', YAAMP_DEFAULT_ALGO);
+		if(user()->getState('yaamp_admin')) {
+			$this->admin = true;
+			$client_ip = arraySafeVal($_SERVER,'REMOTE_ADDR');
+			if (!isAdminIP($client_ip)) {
+				user()->setState('yaamp_admin', false);
+				debuglog("admin attempt from $client_ip");
+				$this->admin = false;
+			}
+		}
 
-        return true;
-    }
+		$algo = user()->getState('yaamp-algo');
+		if(!$algo) user()->setState('yaamp-algo', YAAMP_DEFAULT_ALGO);
 
-    protected function afterAction($action)
-    {
-        //	debuglog("after action ".$action->getId());
-        $d1 = $this->elapsedTime();
+		return true;
+	}
 
-        $url = "$this->id/{$this
-            ->action->id}";
-        $this
-            ->memcache
-            ->add_monitoring_function($url, $d1);
-    }
+	protected function afterAction($action)
+	{
+	//	debuglog("after action ".$action->getId());
 
-    public function actionMaintenance()
-    {
-        $this->render('maintenance');
-    }
+		$d1 = $this->elapsedTime();
 
-    public function goback($count = - 1)
-    {
-        Javascript("window.history.go($count);");
-        die;
-    }
+		$url = "$this->id/{$this->action->id}";
+		$this->memcache->add_monitoring_function($url, $d1);
+	}
+
+	public function actionMaintenance()
+	{
+		$this->render('maintenance');
+	}
+
+	public function goback($count=-1)
+	{
+		Javascript("window.history.go($count);");
+		die;
+	}
 
 }
+

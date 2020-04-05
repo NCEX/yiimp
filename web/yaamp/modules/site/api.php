@@ -10,7 +10,7 @@
 
 request:
 <p class="main-left-box" style='padding: 3px; font-size: .8em; background-color: #ffffee; font-family: monospace;'>
-	http://<?=YAAMP_API_URL ?>/api/wallet?address=<b>WALLET_ADDRESS</b></p>
+	http://<?=YAAMP_API_URL?>/api/wallet?address=<b>WALLET_ADDRESS</b></p>
 
 result:
 <pre class="main-left-box" style='padding: 3px; font-size: .8em; background-color: #ffffee; font-family: monospace;'>
@@ -25,7 +25,7 @@ result:
 
 request:
 <p class="main-left-box" style='padding: 3px; font-size: .8em; background-color: #ffffee; font-family: monospace;'>
-        http://<?=YAAMP_API_URL ?>/api/walletEx?address=<b>WALLET_ADDRESS</b></p>
+        http://<?=YAAMP_API_URL?>/api/walletEx?address=<b>WALLET_ADDRESS</b></p>
 
 result:
 <pre class="main-left-box" style='padding: 3px; font-size: .8em; background-color: #ffffee; font-family: monospace;'>
@@ -45,25 +45,24 @@ result:
 		"accepted": 82463372.083,
 		"rejected": 0
 	}]
-<?php if (YAAMP_API_PAYOUTS): ?>
+<?php if (YAAMP_API_PAYOUTS) : ?>
 	,"payouts":[{
 		"time": 1529860641,
 		"amount": "0.001",
 		"tx": "transaction_id_of_the_payout"
 	}]
-<?php
-endif; ?>
+<?php endif; ?>
 }
 </pre>
 <?php
-if (YAAMP_API_PAYOUTS) echo "Payouts of the last " . (YAAMP_API_PAYOUTS_PERIOD / 3600) . " hours are displayed, please use a block explorer to see all payouts.";
+if (YAAMP_API_PAYOUTS)
+	echo "Payouts of the last ".(YAAMP_API_PAYOUTS_PERIOD / 3600)." hours are displayed, please use a block explorer to see all payouts.";
 ?>
 <p><b>Pool Status</b></p>
 
 request:
 <p class="main-left-box" style='padding: 3px; font-size: .8em; background-color: #ffffee; font-family: monospace;'>
-	http://<?=YAAMP_API_URL
-?>/api/status</p>
+	http://<?=YAAMP_API_URL?>/api/status</p>
 
 result:
 <pre class="main-left-box" style='padding: 3px; font-size: .8em; background-color: #ffffee; font-family: monospace;'>
@@ -89,8 +88,7 @@ result:
 
 request:
 <p class="main-left-box" style='padding: 3px; font-size: .8em; background-color: #ffffee; font-family: monospace;'>
-	http://<?=YAAMP_API_URL
-?>/api/currencies</p>
+	http://<?=YAAMP_API_URL?>/api/currencies</p>
 
 result:
 <pre class="main-left-box" style='padding: 3px; font-size: .8em; background-color: #ffffee; font-family: monospace;'>
@@ -113,14 +111,13 @@ result:
 }
 </pre>
 
-<?php if (YAAMP_RENTAL): ?>
+<?php if (YAAMP_RENTAL) : ?>
 
 <p><b>Rental Status</b></p>
 
 request:
 <p class="main-left-box" style='padding: 3px; font-size: .8em; background-color: #ffffee; font-family: monospace;'>
-	http://<?=YAAMP_API_URL
-?>/api/rental?key=API_KEY</p>
+	http://<?=YAAMP_API_URL?>/api/rental?key=API_KEY</p>
 
 result:
 <pre class="main-left-box" style='padding: 3px; font-size: .8em; background-color: #ffffee; font-family: monospace;'>
@@ -157,8 +154,7 @@ result:
 
 request:
 <p class="main-left-box" style='padding: 3px; font-size: .8em; background-color: #ffffee; font-family: monospace;'>
-	http://<?=YAAMP_API_URL
-?>/api/rental_price?key=API_KEY&jobid=xx&price=xx</p>
+	http://<?=YAAMP_API_URL?>/api/rental_price?key=API_KEY&jobid=xx&price=xx</p>
 
 </pre>
 
@@ -168,8 +164,7 @@ request:
 
 request:
 <p class="main-left-box" style='padding: 3px; font-size: .8em; background-color: #ffffee; font-family: monospace;'>
-	http://<?=YAAMP_API_URL
-?>/api/rental_hashrate?key=API_KEY&jobid=xx&hashrate=xx</p>
+	http://<?=YAAMP_API_URL?>/api/rental_hashrate?key=API_KEY&jobid=xx&hashrate=xx</p>
 
 </pre>
 
@@ -177,8 +172,7 @@ request:
 
 request:
 <p class="main-left-box" style='padding: 3px; font-size: .8em; background-color: #ffffee; font-family: monospace;'>
-	http://<?=YAAMP_API_URL
-?>/api/rental_start?key=API_KEY&jobid=xx</p>
+	http://<?=YAAMP_API_URL?>/api/rental_start?key=API_KEY&jobid=xx</p>
 
 </pre>
 
@@ -186,13 +180,11 @@ request:
 
 request:
 <p class="main-left-box" style='padding: 3px; font-size: .8em; background-color: #ffffee; font-family: monospace;'>
-	http://<?=YAAMP_API_URL
-?>/api/rental_stop?key=API_KEY&jobid=xx</p>
+	http://<?=YAAMP_API_URL?>/api/rental_stop?key=API_KEY&jobid=xx</p>
 
 </pre>
 
-<?php
-endif; /* RENTAL */ ?>
+<?php endif; /* RENTAL */ ?>
 
 <br><br>
 
@@ -207,3 +199,5 @@ endif; /* RENTAL */ ?>
 
 
 </script>
+
+

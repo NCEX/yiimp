@@ -14,7 +14,7 @@ function doKuCoinTrading($quick=false)
 
 	if (exchange_get($exchange, 'disabled')) return;
 
-	$data = kucoin_api_user('accounts');
+	$data = kucoin_api_user('account/balance');
 	if (!kucoin_result_valid($data)) return;
 
 	$savebalance = getdbosql('db_balances', "name='$exchange'");
@@ -22,19 +22,19 @@ function doKuCoinTrading($quick=false)
 	if (is_array($data->data))
 	foreach($data->data as $balance)
 	{
-		if ($balance->currency == 'BTC' && $balance->type == 'main') {
+		if ($balance->coinType == 'BTC') {
 			if (is_object($savebalance)) {
 				$savebalance->balance = $balance->balance;
-				$savebalance->onsell = $balance->holds;
+				$savebalance->onsell = $balance->freezeBalance;
 				$savebalance->save();
 			}
 			continue;
 		}
 
-		if ($updatebalances && $balance->type == 'main') {
+		if ($updatebalances) {
 			// store available balance in market table
 			$coins = getdbolist('db_coins', "symbol=:symbol OR symbol2=:symbol",
-				array(':symbol'=>$balance->currency)
+				array(':symbol'=>$balance->coinType)
 			);
 			if (empty($coins)) continue;
 			foreach ($coins as $coin) {
@@ -44,14 +44,14 @@ function doKuCoinTrading($quick=false)
 				);
 				if (!$market) continue;
 				$market->balance = $balance->balance;
-				$market->ontrade = $balance->holds;
+				$market->ontrade = $balance->freezeBalance;
 				$market->balancetime = time();
 				$market->save();
 
 				$checked_today = cache()->get($exchange.'-deposit_address-check-'.$coin->symbol);
 				if ($coin->installed && !$checked_today) {
 					sleep(1);
-					$obj = kucoin_api_user('deposit-addresses',array('currency'=>$coin->symbol));
+					$obj = kucoin_api_user("account/{$coin->symbol}/wallet/address");
 					if (!kucoin_result_valid($obj)) continue;
 					$result = $obj->data;
 					$deposit_address = objSafeVal($result,'address');

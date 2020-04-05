@@ -197,7 +197,7 @@ function pool_hashrate_graph_init(data)
 	var t = $.parseJSON(data);
 	var plot1 = $.jqplot('pool_hashrate_results', t,
 	{
-		title: '<b>Pool Hashrate ({$algo_unit}/s)</b>',
+		title: '<b>Pool Hashrate (Mh/s)</b>',
 		axes: {
 			xaxis: {
 				tickInterval: 7200,
@@ -235,3 +235,8 @@ function pool_hashrate_graph_init(data)
 
 
 end;
+
+
+
+
+
