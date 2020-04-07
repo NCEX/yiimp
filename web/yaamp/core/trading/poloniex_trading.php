@@ -5,7 +5,7 @@ function doPoloniexCancelOrder($OrderID=false, $pair=false, $poloniex=false)
 	if(!$OrderID) return;
 	if(!$pair) return;
 
-	if(!$poloniex) $poloniex = new CcexAPI;
+	if(!$poloniex) $poloniex = new poloniex;
 
 	$res = $poloniex->cancel_order($pair,$OrderID);
 	if($res && $res['success'])
