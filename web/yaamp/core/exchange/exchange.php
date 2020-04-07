@@ -31,12 +31,9 @@ require_once("empoex.php");
 require_once("jubi.php");
 require_once("alcurex.php");
 require_once("binance.php");
-require_once("cryptopia.php");
 require_once("hitbtc.php");
 require_once("kucoin.php");
 require_once("livecoin.php");
-require_once("nova.php");
-require_once("coinsmarkets.php");
 require_once("cryptowatch.php");
 require_once("stocksexchange.php");
 require_once("tradeogre.php");
@@ -95,8 +92,6 @@ function getMarketUrl($coin, $marketName)
 		$url = "https://bter.com/trade/{$lowsymbol}_{$lowbase}";
 	else if($market == 'cexio')
 		$url = "https://cex.io/trade/{$symbol}-{$base}";
-	else if($market == 'coinsmarkets')
-		$url = "https://coinsmarkets.com/trade-{$base}-{$symbol}.htm";
 	else if($market == 'crex24')
 		$url = "https://crex24.com/exchange/{$symbol}-{$base}";
 	else if($market == 'cryptowatch')
@@ -119,8 +114,6 @@ function getMarketUrl($coin, $marketName)
 		$url = "https://www.kucoin.com/#/trade.pro/{$symbol}-{$base}";
 	else if($market == 'livecoin')
 		$url = "https://www.livecoin.net/trade/?currencyPair={$symbol}%2F{$base}";
-	else if($market == 'nova')
-		$url = "https://novaexchange.com/market/{$base}_{$symbol}/";
 	else if($market == 'stocksexchange')
 		$url = "https://stocks.exchange/trade/$symbol/$base";
 	else if($market == 'tradeogre')

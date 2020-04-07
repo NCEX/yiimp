@@ -11,10 +11,8 @@ function updateRawcoins()
 	exchange_set_default('binance', 'disabled', true);
 	exchange_set_default('bter', 'disabled', true);
 	exchange_set_default('empoex', 'disabled', true);
-	exchange_set_default('coinsmarkets', 'disabled', true);
 	exchange_set_default('gateio', 'disabled', true);
 	exchange_set_default('jubi', 'disabled', true);
-	exchange_set_default('nova', 'disabled', true);
 	exchange_set_default('stocksexchange', 'disabled', true);
 	exchange_set_default('tradesatoshi', 'disabled', true);
 
@@ -145,35 +143,6 @@ function updateRawcoins()
 		}
 	}
 
-	if (!exchange_get('coinsmarkets', 'disabled')) {
-		$list = coinsmarkets_api_query('apicoin');
-		if(!empty($list) && is_array($list))
-		{
-			dborun("UPDATE markets SET deleted=true WHERE name='coinsmarkets'");
-			foreach($list as $pair=>$data) {
-				$e = explode('_', $pair);
-				if ($e[0] != 'BTC') continue;
-				$symbol = strtoupper($e[1]);
-				updateRawCoin('coinsmarkets', $symbol);
-			}
-		}
-	}
-
-	if (!exchange_get('cryptrade', 'disabled')) {
-		$list = cryptrade_api_query('ticker');
-		if(is_array($list) && !empty($list))
-		{
-			dborun("UPDATE markets SET deleted=true WHERE name='cryptrade'");
-			foreach($list as $ticker) {
-				$e = explode('_', $ticker->id);
-				if (strtoupper($e[1]) !== 'BTC')
-					continue;
-				$symbol = strtoupper($e[0]);
-				updateRawCoin('cryptrade', $symbol);
-			}
-		}
-	}
-
 	if (!exchange_get('escodex', 'disabled')) {
 		$list = escodex_api_query('ticker');
 		if(is_array($list) && !empty($list))
@@ -260,21 +229,6 @@ function updateRawcoins()
 				$symbol = trim(strtoupper($item['symbol']));
 				$name = trim($item['name']);
 				updateRawCoin('gateio', $symbol, $name);
-			}
-		}
-	}
-
-	if (!exchange_get('nova', 'disabled')) {
-		$list = nova_api_query('markets');
-		if(is_object($list) && !empty($list->markets))
-		{
-			dborun("UPDATE markets SET deleted=true WHERE name='nova'");
-			foreach($list->markets as $item) {
-				if ($item->basecurrency != 'BTC')
-					continue;
-				$symbol = strtoupper($item->currency);
-				updateRawCoin('nova', $symbol);
-				//debuglog("nova: $symbol");
 			}
 		}
 	}
@@ -445,7 +399,7 @@ function updateRawCoin($marketname, $symbol, $name='unknown')
 	{
 		$algo = '';
 		
-		if (in_array($marketname, array('nova','askcoin','binance','bitz','coinsmarkets','cryptrade','tradeogre','hitbtc'))) {
+		if (in_array($marketname, array('askcoin','binance','bitz','tradeogre','hitbtc'))) {
 			// don't polute too much the db with new coins, its better from exchanges with labels
 			return;
 		}
