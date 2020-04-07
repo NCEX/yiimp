@@ -11,7 +11,6 @@ function updateRawcoins()
 	exchange_set_default('binance', 'disabled', true);
 	exchange_set_default('bter', 'disabled', true);
 	exchange_set_default('empoex', 'disabled', true);
-	exchange_set_default('coinexchange', 'disabled', true);
 	exchange_set_default('coinsmarkets', 'disabled', true);
 	exchange_set_default('gateio', 'disabled', true);
 	exchange_set_default('jubi', 'disabled', true);
@@ -146,21 +145,6 @@ function updateRawcoins()
 		}
 	}
 
-	if (!exchange_get('coinexchange', 'disabled')) {
-		$list = coinexchange_api_query('getmarkets');
-		if(isset($list->result) && !empty($list->result))
-		{
-			dborun("UPDATE markets SET deleted=true WHERE name='coinexchange'");
-			foreach($list->result as $item) {
-				if ($item->BaseCurrencyCode != 'BTC')
-					continue;
-				$symbol = $item->MarketAssetCode;
-				$label = objSafeVal($item, 'MarketAssetName');
-				updateRawCoin('coinexchange', $symbol, $label);
-			}
-		}
-	}
-
 	if (!exchange_get('coinsmarkets', 'disabled')) {
 		$list = coinsmarkets_api_query('apicoin');
 		if(!empty($list) && is_array($list))
@@ -171,36 +155,6 @@ function updateRawcoins()
 				if ($e[0] != 'BTC') continue;
 				$symbol = strtoupper($e[1]);
 				updateRawCoin('coinsmarkets', $symbol);
-			}
-		}
-	}
-
-	if (!exchange_get('cryptopia', 'disabled')) {
-		$list = cryptopia_api_query('GetMarkets');
-		if(isset($list->Data))
-		{
-			dborun("UPDATE markets SET deleted=true WHERE name='cryptopia'");
-			foreach($list->Data as $item) {
-				$e = explode('/', $item->Label);
-				if (strtoupper($e[1]) !== 'BTC')
-					continue;
-				$symbol = strtoupper($e[0]);
-				updateRawCoin('cryptopia', $symbol);
-			}
-		}
-	}
-
-	if (!exchange_get('cryptobridge', 'disabled')) {
-		$list = cryptobridge_api_query('ticker');
-		if(is_array($list) && !empty($list))
-		{
-			dborun("UPDATE markets SET deleted=true WHERE name='cryptobridge'");
-			foreach($list as $ticker) {
-				$e = explode('_', $ticker->id);
-				if (strtoupper($e[1]) !== 'BTC')
-					continue;
-				$symbol = strtoupper($e[0]);
-				updateRawCoin('cryptobridge', $symbol);
 			}
 		}
 	}
@@ -434,7 +388,7 @@ function updateRawcoins()
 	}
 
 	if (!exchange_get('altmarkets', 'disabled')) {
-		$list = coinexchange_api_query('getmarkets');
+		$list = altmarkets_api_query('getmarkets');
 		if(isset($list->result) && !empty($list->result))
 		{
 			dborun("UPDATE markets SET deleted=true WHERE name='altmarkets'");
@@ -490,22 +444,8 @@ function updateRawCoin($marketname, $symbol, $name='unknown')
 	if(!$coin && YAAMP_CREATE_NEW_COINS)
 	{
 		$algo = '';
-		if ($marketname == 'cryptopia') {
-			// get coin label and algo (different api)
-			$labels = cryptopia_api_query('GetCurrencies');
-			if (is_object($labels) && !empty($labels->Data)) {
-				foreach ($labels->Data as $coin) {
-					if ($coin->Symbol == $symbol) {
-						$name = $coin->Name;
-						$algo = strtolower($coin->Algorithm);
-						if ($algo == 'scrypt') $algo = ''; // cryptopia default generally wrong
-						break;
-					}
-				}
-			}
-		}
-
-		if (in_array($marketname, array('nova','askcoin','binance','bitz','coinexchange','coinsmarkets','cryptobridge','cryptrade','tradeogre','hitbtc'))) {
+		
+		if (in_array($marketname, array('nova','askcoin','binance','bitz','coinsmarkets','cryptrade','tradeogre','hitbtc'))) {
 			// don't polute too much the db with new coins, its better from exchanges with labels
 			return;
 		}

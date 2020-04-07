@@ -4,12 +4,10 @@ require_once('binance_trading.php');
 require_once('bittrex_trading.php');
 require_once('bleutrade_trading.php');
 require_once('bter_trading.php');
-require_once('c-cex_trading.php');
 require_once('kraken_trading.php');
 require_once('yobit_trading.php');
 require_once('alcurex_trading.php');
 require_once('coinsmarkets_trading.php');
-require_once('cryptopia_trading.php');
 require_once('hitbtc_trading.php');
 require_once('kucoin_trading.php');
 require_once('livecoin_trading.php');
@@ -27,17 +25,11 @@ function cancelExchangeOrder($order=false)
 			case 'binance':
 				doBinanceCancelOrder($order->uuid);
 				break;
-			case 'c-cex':
-				doCCexCancelOrder($order->uuid);
-				break;
 			case 'bittrex':
 				doBittrexCancelOrder($order->uuid);
 				break;
 			case 'bleutrade':
 				doBleutradeCancelOrder($order->uuid);
-				break;
-			case 'cryptopia':
-				doCryptopiaCancelOrder($order->uuid);
 				break;
 			case 'hitbtc':
 				doHitBTCCancelOrder($order->uuid);
@@ -73,15 +65,6 @@ function runExchange($exchangeName=false)
 				updateBterMarkets();
 				break;
 
-			case 'cryptopia':
-				doCryptopiaTrading(true);
-				updateCryptopiaMarkets();
-				break;
-
-			case 'cryptobridge':
-				updateCryptoBridgeMarkets();
-				break;
-
 			case 'cryptrade':
 				updateCryptradeMarkets();
 				break;
@@ -100,15 +83,6 @@ function runExchange($exchangeName=false)
 
 			case 'cexio':
 				getCexIoBalances();
-				break;
-
-			case 'c-cex':
-				doCCexTrading(true);
-				updateCCexMarkets();
-				break;
-
-			case 'coinexchange':
-				updateCoinExchangeMarkets();
 				break;
 
 			case 'coinsmarkets':
