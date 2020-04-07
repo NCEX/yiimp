@@ -143,6 +143,21 @@ function updateRawcoins()
 		}
 	}
 
+	if (!exchange_get('deliondex', 'disabled')) {
+		$list = deliondex_api_query('ticker');
+		if(is_array($list) && !empty($list))
+		{
+			dborun("UPDATE markets SET deleted=true WHERE name='deliondex'");
+			foreach($list as $ticker) {
+				#debuglog (json_encode($ticker));
+				if (strtoupper($ticker->base) !== 'BTC')
+					continue;
+				$symbol = strtoupper($ticker->quote);
+				updateRawCoin('deliondex', $symbol);
+			}
+		}
+	}
+
 	if (!exchange_get('escodex', 'disabled')) {
 		$list = escodex_api_query('ticker');
 		if(is_array($list) && !empty($list))
@@ -405,7 +420,7 @@ function updateRawCoin($marketname, $symbol, $name='unknown')
 		}
 
 		// some other to ignore...
-		if (in_array($marketname, array('crex24','yobit','coinbene','kucoin','escodex','tradesatoshi')))
+		if (in_array($marketname, array('crex24','yobit','coinbene','kucoin','deliondex','escodex','tradesatoshi')))
 			return;
 
 		if (market_get($marketname, $symbol, "disabled")) {

@@ -118,6 +118,10 @@ function runExchange($exchangeName=false)
 				doPoloniexTrading(true);
 				updatePoloniexMarkets();
 				break;
+			
+			case 'deliondex':
+				updateDelionDexMarkets();
+				break;
 
 			default:
 				debuglog(__FUNCTION__.' '.$exchangeName.' not implemented');
