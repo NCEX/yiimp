@@ -17,11 +17,8 @@ require_once("bitstamp.php");
 require_once("bittrex.php");
 require_once("bitz.php");
 require_once("bleutrade.php");
-//require_once("ccexapi.php");
 require_once("cexio.php");
 require_once("crex24.php");
-require_once("cryptobridge.php");
-require_once("cryptrade.php");
 require_once("escodex.php");
 require_once("gateio.php");
 require_once("graviex.php");
@@ -39,7 +36,6 @@ require_once("hitbtc.php");
 require_once("kucoin.php");
 require_once("livecoin.php");
 require_once("nova.php");
-require_once("coinexchange.php");
 require_once("coinsmarkets.php");
 require_once("cryptowatch.php");
 require_once("stocksexchange.php");
@@ -99,18 +95,10 @@ function getMarketUrl($coin, $marketName)
 		$url = "https://bter.com/trade/{$lowsymbol}_{$lowbase}";
 	else if($market == 'cexio')
 		$url = "https://cex.io/trade/{$symbol}-{$base}";
-	else if($market == 'coinexchange')
-		$url = "https://www.coinexchange.io/market/{$symbol}/{$base}";
 	else if($market == 'coinsmarkets')
 		$url = "https://coinsmarkets.com/trade-{$base}-{$symbol}.htm";
 	else if($market == 'crex24')
 		$url = "https://crex24.com/exchange/{$symbol}-{$base}";
-	else if($market == 'cryptrade')
-		$url = "https://dex.cryptrade.io/market/CRYPTRADE.{$symbol}_CRYPTRADE.{$base}";
-	else if($market == 'cryptobridge')
-		$url = "https://wallet.crypto-bridge.org/market/BRIDGE.{$symbol}_BRIDGE.{$base}";
-	else if($market == 'cryptopia')
-		$url = "https://www.cryptopia.co.nz/Exchange?market={$symbol}_{$base}";
 	else if($market == 'cryptowatch')
 		$url = "https://cryptowat.ch/{$exchange}/{$lowbase}{$lowsymbol}";
 	else if($market == 'c-cex')
