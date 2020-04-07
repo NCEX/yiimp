@@ -90,7 +90,12 @@ foreach($algos as $item)
 	if (!$coins && !$total1) continue;
 	$hashrate1 = dboscalar("SELECT avg(hashrate) FROM hashrate WHERE time>$t1 AND algo=:algo", array(':algo'=>$algo));
 
-	$hashrate = dboscalar("SELECT hashrate FROM hashrate WHERE algo=:algo ORDER BY time DESC LIMIT 1", array(':algo'=>$algo));
+	//$hashrate = dboscalar("SELECT hashrate FROM hashrate WHERE algo=:algo ORDER BY time DESC LIMIT 1", array(':algo'=>$algo));
+	$hashrate = controller()
+        ->memcache
+        ->get_database_scalar("current_hashrate-$algo", "select hashrate from hashrate where algo=:algo order by time desc limit 1", array(
+        ':algo' => $algo
+    ));
 	$hashrate_bad = dboscalar("SELECT hashrate_bad FROM hashrate WHERE algo=:algo ORDER BY time DESC LIMIT 1", array(':algo'=>$algo));
 	$bad = ($hashrate+$hashrate_bad)? round($hashrate_bad * 100 / ($hashrate+$hashrate_bad), 1): '';
 
