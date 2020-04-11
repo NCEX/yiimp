@@ -158,17 +158,6 @@ class ExchangeCommand extends CConsoleCommand
 			if (!$info || arraySafeVal($info,'result') != 'true' || !isset($info['available_funds'])) echo "bter error\n";
 			else echo("bter available: ".json_encode($info['available_funds'])."\n");
 		}
-		if (!empty(EXCH_CCEX_KEY)) {
-			$ccex = new CcexAPI;
-			$balances = $ccex->getBalances();
-			if(!$balances || !isset($balances['result'])) {
-				// older api
-				$balances = $ccex->getBalance();
-				if(!$balances || !isset($balances['return'])) echo "error\n";
-				else echo("c-cex btc: ".json_encode($balances['return'][1])."\n");
-			}
-			else echo("c-cex btc: ".json_encode($balances['result'][1])."\n");
-		}
 		if (!empty(EXCH_COINMARKETS_USER)) {
 			$balances = coinsmarkets_api_user('gettradinginfo');
 			if (!is_array($balances)) echo "coinsmarkets error ".json_encode($balances)."\n";
