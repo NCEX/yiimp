@@ -158,16 +158,7 @@ class ExchangeCommand extends CConsoleCommand
 			if (!$info || arraySafeVal($info,'result') != 'true' || !isset($info['available_funds'])) echo "bter error\n";
 			else echo("bter available: ".json_encode($info['available_funds'])."\n");
 		}
-		if (!empty(EXCH_COINMARKETS_USER)) {
-			$balances = coinsmarkets_api_user('gettradinginfo');
-			if (!is_array($balances)) echo "coinsmarkets error ".json_encode($balances)."\n";
-			else echo("coinsmarkets: ".json_encode($balances['return'])."\n");
-		}
-		if (!empty(EXCH_CRYPTOPIA_KEY)) {
-			$balance = cryptopia_api_user('GetBalance',array("Currency"=>"BTC"));
-			if (!is_object($balance)) echo("cryptopia error ".json_encode($balance)."\n");
-			else echo("cryptopia btc: ".json_encode($balance->Data)."\n");
-		}
+
 		if (!empty(EXCH_HITBTC_KEY)) {
 			$data = hitbtc_api_user('trading/balance');
 			if (!is_object($data) || !isset($data->balance)) echo("hitbtc error ".json_encode($data)."\n");
@@ -192,11 +183,7 @@ class ExchangeCommand extends CConsoleCommand
 			else echo("livecoin btc: ".json_encode($balance)."\n");
 			// {"type":"available","currency":"BTC","value":0}
 		}
-		if (!empty(EXCH_NOVA_KEY)) {
-			$info = nova_api_user('getbalances');
-			if (objSafeVal($info,'status','') != 'success' || !is_array($info->balances)) echo "nova error\n";
-			else echo("nova btc: ".json_encode($info->balances[0])."\n");
-		}
+
 		if(!empty(EXCH_POLONIEX_KEY)) {
 			$poloniex = new poloniex;
 			$balance = $poloniex->get_available_balances();
