@@ -40,6 +40,7 @@ require_once("stocksexchange.php");
 require_once("tradeogre.php");
 require_once("tradesatoshi.php");
 require_once("swiftex.php");
+require_once("unnamed.php");
 
 /* Format an exchange coin Url */
 function getMarketUrl($coin, $marketName)
@@ -127,6 +128,8 @@ function getMarketUrl($coin, $marketName)
 		$url = "https://yobit.net/en/trade/{$symbol}/{$base}";
 	else if($market == 'swiftex')
 		$url = "https://swiftex.co/trading/{$lowsymbol}-{$lowbase}";	
+	else if($market == 'unnamed')
+		$url = "https://www.unnamed.exchange/Exchange/Basic?market={$symbol}_{$base}";	
 	else
 		$url = "";
 
