@@ -350,20 +350,18 @@ function updateRawcoins()
 		}
 	}
 
-	if (!exchange_get('altmarkets', 'disabled')) {
-		$list = altmarkets_api_query('getmarkets');
-		if(isset($list->result) && !empty($list->result))
+	if (!exchange_get('bibox', 'disabled')) {
+		$list = bibox_api_query('marketAll');
+		if(isset($list["result"]) && !empty($list["result"]))
 		{
-			dborun("UPDATE markets SET deleted=true WHERE name='altmarkets'");
-			foreach($list->result as $item) {
-				if ($item->BaseCurrency != 'BTC')
-					continue;
-				$symbol = $item->MarketCurrency;
-				$label = objSafeVal($item, 'MarketCurrencyLong');
-				updateRawCoin('altmarkets', $symbol, $label);
+			dborun("UPDATE markets SET deleted=true WHERE name='bibox'");
+			foreach($list["result"] as $currency) {
+				if ($currency["currency_symbol"] == 'BTC') continue;
+				updateRawCoin('bibox', $currency["coin_symbol"]);
 			}
 		}
 	}
+
 
 	//////////////////////////////////////////////////////////
 

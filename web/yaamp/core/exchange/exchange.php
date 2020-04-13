@@ -41,6 +41,8 @@ require_once("tradeogre.php");
 require_once("tradesatoshi.php");
 require_once("swiftex.php");
 require_once("unnamed.php");
+require_once("bibox.php");
+
 
 /* Format an exchange coin Url */
 function getMarketUrl($coin, $marketName)
@@ -78,8 +80,8 @@ function getMarketUrl($coin, $marketName)
 
 	if($market == 'alcurex')
 		$url = "https://alcurex.com/#{$symbol}-{$base}";
-	else if($market == 'altmarkets')
-		$url = "https://altmarkets.cc/market/{$base}-{$symbol}";
+	else if($market == 'bibox')
+		$url = "https://www.bibox.com/exchange?coinPair={$symbol}_{$base}";
 	else if($market == 'binance')
 		$url = "https://www.binance.com/trade.html?symbol={$symbol}_{$base}";
 	else if($market == 'bittrex')
