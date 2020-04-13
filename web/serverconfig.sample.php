@@ -43,13 +43,11 @@ define('YAAMP_DEFAULT_ALGO', 'x11');
 define('YAAMP_USE_NGINX', false);
 
 // Exchange public keys (private keys are in a separate config file)
-define('EXCH_CRYPTOPIA_KEY', '');
 define('EXCH_POLONIEX_KEY', '');
 define('EXCH_BITTREX_KEY', '');
 define('EXCH_BLEUTRADE_KEY', '');
 define('EXCH_BTER_KEY', '');
 define('EXCH_YOBIT_KEY', '');
-define('EXCH_CCEX_KEY', '');
 define('EXCH_CEXIO_ID', '');
 define('EXCH_CEXIO_KEY', '');
 define('EXCH_COINMARKETS_USER', '');
@@ -61,7 +59,6 @@ define('EXCH_HITBTC_KEY','');
 define('EXCH_KRAKEN_KEY', '');
 define('EXCH_KUCOIN_KEY', '');
 define('EXCH_LIVECOIN_KEY', '');
-define('EXCH_NOVA_KEY', '');
 define('EXCH_STOCKSEXCHANGE_KEY', '');
 define('EXCH_TRADEOGRE_KEY','');
 
