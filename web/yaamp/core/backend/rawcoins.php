@@ -90,25 +90,6 @@ function updateRawcoins()
 		}
 	}
 
-	if (!exchange_get('c-cex', 'disabled')) {
-		$ccex = new CcexAPI;
-		$list = $ccex->getPairs();
-		if($list)
-		{
-			sleep(1);
-			$names = $ccex->getCoinNames();
-
-			dborun("UPDATE markets SET deleted=true WHERE name='c-cex'");
-			foreach($list as $item)
-			{
-				$e = explode('-', $item);
-				$symbol = strtoupper($e[0]);
-
-				updateRawCoin('c-cex', $symbol, arraySafeVal($names, $e[0], 'unknown'));
-			}
-		}
-	}
-
 	if (!exchange_get('bter', 'disabled')) {
 		$list = bter_api_query('marketlist');
 		if(is_object($list) && is_array($list->data))
@@ -356,6 +337,19 @@ function updateRawcoins()
 		}
 	}
 
+	if (!exchange_get('unnamed', 'disabled')) {
+		$data = unnamed_api_query('Ticker');
+		if(is_object($data) && !empty($data->market))
+		{
+			dborun("UPDATE markets SET deleted=true WHERE name='unnamed'");
+			foreach($data->market as $item) {
+				$symbol = $item->currency;
+				$name = trim($item->currencyLong);
+				updateRawCoin('unnamed', $symbol, $name);
+			}
+		}
+	}
+
 	if (!exchange_get('altmarkets', 'disabled')) {
 		$list = altmarkets_api_query('getmarkets');
 		if(isset($list->result) && !empty($list->result))
@@ -420,7 +414,7 @@ function updateRawCoin($marketname, $symbol, $name='unknown')
 		}
 
 		// some other to ignore...
-		if (in_array($marketname, array('crex24','yobit','coinbene','kucoin','deliondex','escodex','tradesatoshi')))
+		if (in_array($marketname, array('crex24','yobit','coinbene','kucoin','deliondex','escodex','tradesatoshi','unnamed')))
 			return;
 
 		if (market_get($marketname, $symbol, "disabled")) {
