@@ -29,7 +29,7 @@
 #include <stdint.h>
 #include <string.h>
 
-#include "insecure_memzero.h"
+#include "yespower/insecure_memzero.h"
 #include "sysendian_yp.h"
 
 #include "sha256-P.h"
