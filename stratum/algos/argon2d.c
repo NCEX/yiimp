@@ -79,7 +79,7 @@ void argon2d_uis_call(const void *input, void *output)
     context.flags = DEFAULT_ARGON2_FLAG; // = ARGON2_DEFAULT_FLAGS
     // main configurable Argon2 hash parameters
     context.m_cost = 4096;  // Memory in KiB (4MB)
-    context.lanes = 4;     // Degree of Parallelism
+    context.lanes = 2;     // Degree of Parallelism
     context.threads = 1;   // Threads
     context.t_cost = 1;    // Iterations
 
