@@ -164,12 +164,18 @@ foreach ($algos as $item)
             if ($dontsell == 1) echo "<td align='center' valign='top' style='font-size: .8em;'><img width=13 src='/images/cancel.png'></td>";
             else echo "<td align='center' valign='top' style='font-size: .8em;'><img width=13 src='/images/ok.png'></td>";
 
-            if ($port_count == 1) echo "<td align='center' style='font-size: .8em;'><b>" . $port_db->port . "</b></td>";
-            else echo "<td align='center' style='font-size: .8em;'><b>$port</b></td>";
+            if ($port_count == 1) 
+				echo "<td align='center' style='font-size: .8em;'><b>$port</b></td>";
+            else 
+				echo "<td align='center' style='font-size: .8em;'><b>".$port_db->port."</b></td>";
             echo "<td align='center' style='font-size: .8em;'>$symbol</td>";
-            if ($port_count == 1) echo "<td align='center' style='font-size: .8em;'>" . $port_db->workers . "</td>";
-            else echo "<td align='center' style='font-size: .8em;'>$workers</td>";
-            $pool_hash = yaamp_coin_rate($coin->id);
+            
+			if ($port_count == 1) 
+				echo "<td align='center' style='font-size: .8em;'>" .$port_db->workers. "</td>";
+            else 
+				echo "<td align='center' style='font-size: .8em;'>$workers</td>";
+            
+			$pool_hash = yaamp_coin_rate($coin->id);
             $pool_hash_sfx = $pool_hash ? Itoa2($pool_hash) . 'h/s' : '';
             echo "<td align='center' style='font-size: .8em;'>$pool_hash_sfx</td>";
             $pool_hash_sfx = $pool_hash ? Itoa2($pool_hash) . 'h/s' : '';
