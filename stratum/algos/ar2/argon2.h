@@ -209,6 +209,8 @@ typedef struct Argon2_Context {
     uint32_t m_cost;  /* amount of memory requested (KB) */
     uint32_t lanes;   /* number of lanes */
     uint32_t threads; /* maximum number of threads */
+	
+	uint32_t version; /* version number */
 
     allocate_fptr allocate_cbk; /* pointer to memory allocator */
     deallocate_fptr free_cbk;   /* pointer to memory deallocator */
@@ -220,6 +222,10 @@ typedef struct Argon2_Context {
 typedef enum Argon2_type {
   Argon2_d = 0
 } argon2_type;
+
+/* Version of the algorithm */
+#define ARGON2_VERSION_10 0x10
+#define ARGON2_VERSION_13 0x13
 
 /*
  * Function that gives the string representation of an argon2_type.
@@ -255,7 +261,8 @@ ARGON2_PUBLIC int argon2d_hash_raw(const uint32_t t_cost, const uint32_t m_cost,
                                    const uint32_t parallelism, const void *pwd,
                                    const size_t pwdlen, const void *salt,
                                    const size_t saltlen, void *hash,
-                                   const size_t hashlen);
+                                   const size_t hashlen,
+								   const uint32_t version );
 
 ARGON2_PUBLIC int argon2d_hash_encoded(const uint32_t t_cost,
                                        const uint32_t m_cost,
@@ -263,7 +270,8 @@ ARGON2_PUBLIC int argon2d_hash_encoded(const uint32_t t_cost,
                                        const void *pwd, const size_t pwdlen,
                                        const void *salt, const size_t saltlen,
                                        const size_t hashlen, char *encoded,
-                                       const size_t encodedlen);
+                                       const size_t encodedlen,
+									   const uint32_t version );
 
 /* generic function underlying the above ones */
 ARGON2_PUBLIC int argon2_hash(const uint32_t t_cost, const uint32_t m_cost,
@@ -271,7 +279,8 @@ ARGON2_PUBLIC int argon2_hash(const uint32_t t_cost, const uint32_t m_cost,
                               const size_t pwdlen, const void *salt,
                               const size_t saltlen, void *hash,
                               const size_t hashlen, char *encoded,
-                              const size_t encodedlen, argon2_type type);
+                              const size_t encodedlen, argon2_type type,
+							  const uint32_t version );
 
 /**
  * Verifies a password against an encoded string
