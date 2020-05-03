@@ -98,11 +98,4 @@ void client_initialize_difficulty(YAAMP_CLIENT *client)
 		client->difficulty_actual = diff;
 		client->difficulty_fixed = true;
 	}
-
 }
-
-
-
-
-
-
