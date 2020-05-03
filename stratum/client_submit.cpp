@@ -93,30 +93,6 @@ void build_submit_values_res(YAAMP_JOB_VALUES *submitvalues, YAAMP_JOB_TEMPLATE 
 	printf("merkle root %s\n", merkleroot.c_str());
 #endif
 
-	// TODO: create a correct equihash blockheader
-	/*
-        var header =  new Buffer(140);
-        var position = 0;
-        header.writeUInt32LE(this.rpcData.version, position += 0, 4, 'hex');
-        header.write(this.prevHashReversed, position += 4, 32, 'hex');
-        header.write(this.merkleRootReversed, position += 32, 32, 'hex');
-        header.write(this.hashReserved, position += 32, 32, 'hex'); 
-        header.write(nTime, position += 32, 4, 'hex');
-        header.write(util.reverseBuffer(new Buffer(rpcData.bits, 'hex')).toString('hex'), position += 4, 4, 'hex');
-        header.write(nonce, position += 4, 32, 'hex');
-		
-		CBlockHeader
-        READWRITE(this->nVersion);
-        READWRITE(hashPrevBlock);
-        READWRITE(hashMerkleRoot);
-        READWRITE(hashFinalSaplingRoot);
-        READWRITE(nTime);
-        READWRITE(nBits);
-        READWRITE(nNonce);
-        READWRITE(nSolution);
-		
-    */
-
     {
         
 
