@@ -339,13 +339,16 @@ function updateRawcoins()
 
 	if (!exchange_get('unnamed', 'disabled')) {
 		$data = unnamed_api_query('Ticker');
-		if(is_object($data) && !empty($data->market))
+		if(is_object($data))
 		{
 			dborun("UPDATE markets SET deleted=true WHERE name='unnamed'");
 			foreach($data->market as $item) {
-				$symbol = $item->currency;
-				$name = trim($item->currencyLong);
-				updateRawCoin('unnamed', $symbol, $name);
+				$e = explode('_', $item->market);
+				$base = strtoupper($e[1]);
+				if ($base != 'BTC')
+					continue;
+				$symbol = strtoupper($e[0]);
+				updateRawCoin('unnamed', $symbol, $item->currency);
 			}
 		}
 	}
