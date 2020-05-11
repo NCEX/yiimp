@@ -1,3 +1,0 @@
-[submodule "stratum/algos/RandomX"]
-	path = stratum/algos/RandomX
-	url = https://github.com/tevador/RandomX
