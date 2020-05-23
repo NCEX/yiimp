@@ -18,6 +18,7 @@ $count = $count? $count: 50;
 WriteBoxHeader("Last $count Earnings: $user->username");
 $earnings = getdbolist('db_earnings', "userid=$user->id order by create_time desc limit :count", array(':count'=>$count));
 
+
 echo <<<EOT
 
 <style type="text/css">
@@ -116,7 +117,4 @@ foreach($earnings as $earning)
 echo "</table>";
 
 echo "<br></div></div><br>";
-
-
-
 
