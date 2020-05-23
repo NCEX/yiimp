@@ -78,6 +78,7 @@ function BackendBlockNew($coin, $db_block)
 		// [*:message] => 'CDbCommand failed to execute the SQL statement: SQLSTATE[HY000]: General error: 1205 Lock wait timeout exceeded; try restarting transaction'
 	} */
 }
+	
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 // Import new blocks (notified by the stratum)
@@ -475,4 +476,3 @@ function MonitorBTC()
 		if(!$b) debuglog('error sending email');
 	}
 }
-
