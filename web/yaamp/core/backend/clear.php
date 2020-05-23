@@ -2,7 +2,7 @@
 
 function BackendClearEarnings($coinid = NULL)
 {
-//	debuglog(__FUNCTION__);
+	// debuglog(__FUNCTION__);
 
 	if (YAAMP_ALLOW_EXCHANGE)
 		$delay = time() - (int) YAAMP_PAYMENTS_FREQ;
@@ -11,8 +11,9 @@ function BackendClearEarnings($coinid = NULL)
 	$total_cleared = 0.0;
 
 	$sqlFilter = $coinid ? " AND coinid=".intval($coinid) : '';
-
+	
 	$list = getdbolist('db_earnings', "status=1 AND mature_time<$delay $sqlFilter");
+	
 	foreach($list as $earning)
 	{
 		$user = getdbo('db_accounts', $earning->userid);
