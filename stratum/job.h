@@ -65,6 +65,9 @@ struct YAAMP_JOB_TEMPLATE
 
 	int auxs_size;
 	YAAMP_COIND_AUX *auxs[MAX_AUXS];
+	
+	vector<string> BackWhither;
+	
 };
 
 #define YAAMP_JOB_MAXSUBIDS		200
