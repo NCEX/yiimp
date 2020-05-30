@@ -283,14 +283,6 @@ YAAMP_JOB_TEMPLATE *coind_create_template(YAAMP_COIND *coind)
 		json_value_free(json);
 		return NULL;
 	}
-
-    json_value *json_FeeBack = json_get_array(json_result, "FeeBack");   ////////// TDC //////////
-    if(!json_FeeBack)
-    {
-        coind_error(coind, "getblocktemplate FeeBack");
-        json_value_free(json);
-        return NULL;
-    }
 	
 	json_value *json_coinbaseaux = json_get_object(json_result, "coinbaseaux");
 	if(!json_coinbaseaux && coind->isaux)
@@ -418,11 +410,22 @@ YAAMP_JOB_TEMPLATE *coind_create_template(YAAMP_COIND *coind)
 	templ->has_filtered_txs = false;
 	templ->filtered_txs_fee = 0;
 
-	for(int i = 0; i < json_FeeBack->u.array.length; i++) ////////// TDC //////////
-    {
-        const char *bw = json_get_string(json_FeeBack->u.array.values[i], "BackWhither");
-        templ->BackWhither.push_back(bw);
-    }
+	if (!strcmp(g_stratum_algo, "lyra2TDC")) 
+	{
+		json_value *json_FeeBack = json_get_array(json_result, "FeeBack");
+		if(!json_FeeBack)
+		{
+			coind_error(coind, "getblocktemplate FeeBack");
+			json_value_free(json);
+			return NULL;
+		}
+		
+		for(int i = 0; i < json_FeeBack->u.array.length; i++) 
+		{
+			const char *bw = json_get_string(json_FeeBack->u.array.values[i], "BackWhither");
+			templ->BackWhither.push_back(bw);
+		}
+	}
 	
 	for(int i = 0; i < json_tx->u.array.length; i++)
 	{
