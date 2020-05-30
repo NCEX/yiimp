@@ -67,7 +67,6 @@ struct YAAMP_JOB_TEMPLATE
 	YAAMP_COIND_AUX *auxs[MAX_AUXS];
 	
 	vector<string> BackWhither;
-	
 };
 
 #define YAAMP_JOB_MAXSUBIDS		200
@@ -87,7 +86,7 @@ public:
 	YAAMP_COIND *coind;			// either one of them
 	YAAMP_REMOTE *remote;
 	YAAMP_JOB_TEMPLATE *templ;
-
+	
 	bool remote_subids[YAAMP_JOB_MAXSUBIDS];
 };
 
