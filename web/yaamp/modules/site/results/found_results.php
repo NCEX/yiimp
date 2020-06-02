@@ -51,6 +51,8 @@ span.block.new       { color: white; background-color: #ad4ef0; }
 span.block.orphan    { color: white; background-color: #d9534f; }
 span.block.immature  { color: white; background-color: #f0ad4e; }
 span.block.confirmed { color: white; background-color: #5cb85c; }
+span.solo	{ padding: 2px; display: inline-block; text-align: center; min-width: 15px; border-radius: 3px; color: white; background-color: #48D8D8; }
+
 b.row a { font-size: 10pt; }
 .ssrow td.row { font-size: .8em; }
 td.right { text-align: right; }
@@ -65,6 +67,7 @@ td.right { text-align: right; }
 <th align="right">Difficulty</th>
 <th align="right">Block</th>
 <th align="right">Time</th>
+<th align="right">Type</th>
 <th align="right">Status</th>
 </tr>
 </thead>
@@ -111,8 +114,14 @@ foreach($db_blocks as $db_block)
 	echo '<td class="row right" title="found '.$db_block->difficulty_user.'">'.$difficulty.'</td>';
 	echo '<td class="row right">'.$height.'</td>';
 	echo '<td class="row right">'.$d.' ago</td>';
+	
 	echo '<td class="row right">';
-
+	if($db_block->solo == '1') 
+		echo '<span class="solo">solo</span>';
+	else echo '<span></span>';
+	echo "</td>";
+	
+	echo '<td class="row right">';
 	if($db_block->category == 'orphan')
 		echo '<span class="block orphan">Orphan</span>';
 

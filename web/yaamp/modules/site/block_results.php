@@ -29,7 +29,12 @@ showTableSorter('maintable', "{
 
 echo <<<end
 <style type="text/css">
-td.orphan { color: darkred; }
+span.block { padding: 2px; display: inline-block; text-align: center; min-width: 15px; border-radius: 3px; }
+span.block.new       { color: white; background-color: #ad4ef0; }
+span.block.orphan    { color: white; background-color: #d9534f; }
+span.block.immature  { color: white; background-color: #f0ad4e; }
+span.block.confirmed { color: white; background-color: #5cb85c; }
+span.block.solo      { color: white; background-color: #48D8D8; }
 </style>
 
 <thead>
@@ -39,6 +44,7 @@ td.orphan { color: darkred; }
 <th>Time</th>
 <th>Height</th>
 <th>Amount</th>
+<th>Type</th>
 <th>Status</th>
 <th>Difficulty</th>
 <th>Share Diff</th>
@@ -87,10 +93,17 @@ foreach($db_blocks as $db_block)
 	echo '<td data="'.$db_block->time.'"><b>'.$d.' ago</b></td>';
 	echo '<td>'.$coin->createExplorerLink($db_block->height, array('height'=>$db_block->height)).'</td>';
 	echo '<td>'.$db_block->amount.'</td>';
+	
+	echo '<td>';
+	if($db_block->solo == '1') 
+		echo '<span class="block solo">solo</span>';
+	else echo '<span></span>'; 
+	echo "</td>";
+	
 	echo '<td class="'.strtolower($db_block->category).'">';
 
 	if($db_block->category == 'orphan')
-		echo "Orphan";
+		echo '<span class="block orphan">Orphan</span>';
 
 	else if($db_block->category == 'immature') {
 		$eta = '';
@@ -98,17 +111,17 @@ foreach($db_blocks as $db_block)
 			$t = (int) ($coin->mature_blocks - $db_block->confirmations) * $coin->block_time;
 			$eta = "ETA: ".sprintf('%dh %02dmn', ($t/3600), ($t/60)%60);
 		}
-		echo "<span title=\"$eta\">Immature ({$db_block->confirmations}/{$coin->mature_blocks})</span>";
+		echo '<span class="block immature" title="'.$eta.'">Immature ('.$db_block->confirmations.'/'.$coin->mature_blocks.')</span>';
 	}
 
 	else if($db_block->category == 'generate')
-		echo 'Confirmed';
+		echo '<span class="block confirmed">Confirmed</span>';
 
 	else if($db_block->category == 'stake')
 		echo "Stake ({$db_block->confirmations})";
 
 	else if($db_block->category == 'generated')
-		echo 'Stake';
+		echo '<span class="block stake">Stake</span>';
 
 	echo "</td>";
 
@@ -123,8 +136,6 @@ foreach($db_blocks as $db_block)
 		$user = getdbo('db_accounts', $db_block->userid);
 		$finder = $user ? substr($user->username, 0, 7).'...' : '';
 	}
-	
-	$is_solo = getdbocount('db_workers', "algo=:algo and userid=:userid and password like '%m=solo%'", array(':algo'=>$db_block->algo,':userid'=>$db_block->userid));
 	
 	echo '<td>'.$finder.'</td>';
 	echo '<td style="font-size: .8em; font-family: monospace;">';

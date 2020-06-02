@@ -25,9 +25,20 @@ function BackendBlockNew($coin, $db_block)
 		$user = getdbo('db_accounts', $item['userid']);
 		if(!$user) continue;
 
-		$amount = $reward * $hash_power / $total_hash_power;
+		$is_solo = getdbocount('db_workers',"algo=:algo and userid=:userid and password like '%m=solo%'", 
+			array(':algo'=>$db_block->algo,':userid'=>$db_block->userid));
+		if(!$is_solo)
+		{
+			$amount = $reward;
+			dborun("UPDATE blocks SET solo=1 WHERE blocks.id=$db_block->id", array(':algo'=>$db_block->algo,':userid'=>$db_block->userid));
+		}
+		else 
+		{
+			$amount = $reward * $hash_power / $total_hash_power;
+		}
 		if(!$user->no_fees) $amount = take_yaamp_fee($amount, $coin->algo);
-		if(!empty($user->donation)) {
+		if(!empty($user->donation)) 
+		{
 			$amount = take_yaamp_fee($amount, $coin->algo, $user->donation);
 			if ($amount <= 0) continue;
 		}
@@ -47,7 +58,7 @@ function BackendBlockNew($coin, $db_block)
 		}
 		else	// immature
 			$earning->status = 0;
-
+		
 		$ucoin = getdbo('db_coins', $user->coinid);
 		if(!YAAMP_ALLOW_EXCHANGE && $ucoin && $ucoin->algo != $coin->algo) {
 			debuglog($coin->symbol.": invalid earning for {$user->username}, user coin is {$ucoin->symbol}");
@@ -60,13 +71,13 @@ function BackendBlockNew($coin, $db_block)
 		$user->last_earning = time();
 		$user->save();
 	}
-
+	
 	$delay = time() - 5*60;
 	$sqlCond = "time < $delay";
 	if(!YAAMP_ALLOW_EXCHANGE) // only one coin mined
 		$sqlCond .= " AND coinid = ".intval($coin->id);
 
-/*	try {
+	try {
 		dborun("DELETE FROM shares WHERE algo=:algo AND $sqlCond", array(':algo'=>$coin->algo));
 
 	} catch (CDbException $e) {
@@ -76,7 +87,7 @@ function BackendBlockNew($coin, $db_block)
 		dborun("DELETE FROM shares WHERE algo=:algo AND $sqlCond", array(':algo'=>$coin->algo));
 		// [errorInfo] => array(0 => 'HY000', 1 => 1205, 2 => 'Lock wait timeout exceeded; try restarting transaction')
 		// [*:message] => 'CDbCommand failed to execute the SQL statement: SQLSTATE[HY000]: General error: 1205 Lock wait timeout exceeded; try restarting transaction'
-	} */
+	} 
 }
 	
 
