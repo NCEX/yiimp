@@ -31,6 +31,7 @@ span.block.cleared  { color: white; background-color: gray; }
 <tr>
 <td></td>
 <th>Name</th>
+<th align=right>Block</th>
 <th align=right>Amount</th>
 <th align=right>Percent</th>
 <th align=right>mBTC</th>
@@ -74,6 +75,7 @@ foreach($earnings as $earning)
 		continue;
 	}
 
+	$height = number_format($block->height, 0, '.', ' ');
 	$reward = altcoinvaluetoa($earning->amount);
 	$percent = $block->amount ? percentvaluetoa($earning->amount * 100/$block->amount) : 0;
 	$value = mbitcoinvaluetoa($earning->amount*$earning->price*1000);
@@ -82,6 +84,7 @@ foreach($earnings as $earning)
 	echo '<tr class="ssrow">';
 	echo '<td width="18"><img width="16" src="'.$coin->image.'"></td>';
 	echo '<td><b>'.$blockUrl.'</b><span style="font-size: .8em;"> ('.$coin->algo.')</span></td>';
+	echo '<td align="right" style="font-size: .8em;">'.$height.'</td>';
 	echo '<td align="right" style="font-size: .8em;"><b>'.$reward.' '.$coin->symbol_show.'</b></td>';
 	echo '<td align="right" style="font-size: .8em;">'.$percent.'%</td>';
 	echo '<td align="right" style="font-size: .8em;">'.$value.'</td>';
@@ -94,7 +97,7 @@ foreach($earnings as $earning)
 			$t = (int) ($coin->mature_blocks - $block->confirmations) * $coin->block_time;
 			$eta = "ETA: ".sprintf('%dh %02dmn', ($t/3600), ($t/60)%60);
 		}
-		echo '<span class="block immature" title="'.$eta.'">Immature ('.$block->confirmations.')</span>';
+		echo '<span class="block immature" title="'.$eta.'">Immature ('.$block->confirmations.'/'.$coin->mature_blocks.')</span>';
 	}
 
 	else if($earning->status == 1)
