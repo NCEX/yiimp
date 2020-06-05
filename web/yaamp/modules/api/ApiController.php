@@ -38,6 +38,14 @@ class ApiController extends CommonController
                 ':algo' => $algo
             ));
 
+            $workers_shared = (int) controller()->memcache->get_database_scalar("api_status_workers_shared-$algo", "select COUNT(id) FROM workers WHERE algo=:algo and not password like '%m=solo%'", array(
+                ':algo' => $algo
+            ));
+
+            $workers_solo = (int) controller()->memcache->get_database_scalar("api_status_workers_solo-$algo", "select COUNT(id) FROM workers WHERE algo=:algo and password like '%m=solo%'", array(
+                ':algo' => $algo
+            ));
+
             $hashrate = controller()->memcache->get_database_scalar("api_status_hashrate-$algo", "select hashrate from hashrate where algo=:algo order by time desc limit 1", array(
                 ':algo' => $algo
             ));
@@ -74,6 +82,7 @@ class ApiController extends CommonController
             $btcmhday1        = $hashrate1 > 0 ? mbitcoinvaluetoa($total1 / $hashrate1 * 1000000 * 1000 * $algo_unit_factor) : 0;
 
             $fees = yaamp_fee($algo);
+            $fees_solo = yaamp_fee($algo);
             $port = getAlgoPort($algo);
 
             $stat = array(
@@ -81,8 +90,11 @@ class ApiController extends CommonController
                 "port" => (int) $port,
                 "coins" => $coins,
                 "fees" => (double) $fees,
+                "fees_solo" => (double) $fees_solo,
                 "hashrate" => (double) $hashrate,
                 "workers" => (int) $workers,
+                "workers_shared" => (int) $workers_shared,
+                "workers_solo" => (int) $workers_solo,
                 "estimate_current" => $price,
                 "estimate_last24h" => $avgprice,
                 "actual_last24h" => $btcmhday1,

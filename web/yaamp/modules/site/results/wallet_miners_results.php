@@ -62,7 +62,18 @@ foreach(yaamp_get_algos() as $algo)
 	echo '<tr class="ssrow">';
 	echo '<td><b>'.$algo.'</b></td>';
 	echo '<td align="right">'.$minercount.'</td>';
-	echo '<td align="right" width="100">'.$percent_shares.'%</td>';
+	
+	$is_solo = getdbocount('db_workers',"algo=:algo and userid=:userid and password like '%m=solo%'", 
+			array(':algo'=>$algo,':userid'=>$userid));
+	
+	if($is_solo)
+	{
+		echo '<td align="right" width="100"><span class="solo label">Solo</span></td>';
+	}
+	else
+	{
+		echo '<td align="right" width="100">'.$percent_shares.'%</td>';
+	}
 	echo '<td align="right" width="100"><b>'.$user_rate1.'</b></td>';
 	echo '<td align="right">'.$percent_bad.'</td>';
 	echo '</tr>';

@@ -7,48 +7,96 @@ function BackendBlockNew($coin, $db_block)
 	if(!$reward || $db_block->algo == 'PoS' || $db_block->algo == 'MN') return;
 	if($db_block->category == 'stake' || $db_block->category == 'generated') return;
 
-	$sqlCond = "valid = 1";
-	if(!YAAMP_ALLOW_EXCHANGE) // only one coin mined
-		$sqlCond .= " AND coinid = ".intval($coin->id);
-
-	$total_hash_power = dboscalar("SELECT SUM(difficulty) FROM shares WHERE $sqlCond AND algo=:algo", array(':algo'=>$coin->algo));
-	if(!$total_hash_power) return;
-
-	$list = dbolist("SELECT userid, SUM(difficulty) AS total FROM shares WHERE $sqlCond AND algo=:algo GROUP BY userid",
-			array(':algo'=>$coin->algo));
-
-	foreach($list as $item)
-	{
-		$hash_power = $item['total'];
-		if(!$hash_power) continue;
-
-		$user = getdbo('db_accounts', $item['userid']);
-		if(!$user) continue;
-
-		$is_solo = getdbocount('db_workers',"algo=:algo and userid=:userid and password like '%m=solo%'", 
+	$is_solo = getdbocount('db_workers',"algo=:algo and userid=:userid and password like '%m=solo%'", 
 			array(':algo'=>$db_block->algo,':userid'=>$db_block->userid));
-		if(!$is_solo)
+	
+	if ($is_solo == 0)
+	{
+		//Clear Share Solo Miner before calc
+		$solo_workers = getdbolist('db_workers',"algo=:algo and password like '%m=solo%'", 
+				array(':algo'=>$db_block->algo));
+	
+		foreach ($solo_workers as $solo_worker)
 		{
-			$amount = $reward;
-			dborun("UPDATE blocks SET solo=1 WHERE blocks.id=$db_block->id", array(':algo'=>$db_block->algo,':userid'=>$db_block->userid));
+			$sqlCond = "";
+			if(!YAAMP_ALLOW_EXCHANGE) // only one coin mined
+				$sqlCond .= " coinid = ".intval($coin->id);
+				
+			dborun("DELETE FROM shares WHERE algo=:algo AND workerid=:workerid AND $sqlCond",array(':algo'=>$coin->algo,':workerid'=>$solo_worker->id));
 		}
-		else 
-		{
-			$amount = $reward * $hash_power / $total_hash_power;
-		}
-		if(!$user->no_fees) $amount = take_yaamp_fee($amount, $coin->algo);
-		if(!empty($user->donation)) 
-		{
-			$amount = take_yaamp_fee($amount, $coin->algo, $user->donation);
-			if ($amount <= 0) continue;
-		}
+		
+		$sqlCond = "valid = 1";
+		if(!YAAMP_ALLOW_EXCHANGE) // only one coin mined
+			$sqlCond .= " AND coinid = ".intval($coin->id);
 
+		$total_hash_power = dboscalar("SELECT SUM(difficulty) FROM shares WHERE $sqlCond AND algo=:algo", array(':algo'=>$coin->algo));
+		if(!$total_hash_power) return;
+
+		$list = dbolist("SELECT userid, SUM(difficulty) AS total FROM shares WHERE $sqlCond AND algo=:algo GROUP BY userid",
+				array(':algo'=>$coin->algo));
+
+		foreach($list as $item)
+		{
+			$hash_power = $item['total'];
+			if(!$hash_power) continue;
+
+			$user = getdbo('db_accounts', $item['userid']);
+			if(!$user) continue;
+
+			$amount = $reward * $hash_power / $total_hash_power;
+		
+			if(!$user->no_fees) $amount = take_yaamp_fee($amount, $coin->algo);
+			if(!empty($user->donation)) 
+			{
+				$amount = take_yaamp_fee($amount, $coin->algo, $user->donation);
+				if ($amount <= 0) continue;
+			}
+			$earning = new db_earnings;
+			$earning->userid = $user->id;
+			$earning->amount = $amount;
+			$earning->coinid = $coin->id;
+			$earning->blockid = $db_block->id;
+			$earning->create_time = $db_block->time;
+			$earning->price = $coin->price;
+
+			if($db_block->category == 'generate')
+			{
+				$earning->mature_time = time();
+				$earning->status = 1;
+			}
+			else	// immature
+				$earning->status = 0;
+		
+			$ucoin = getdbo('db_coins', $user->coinid);
+			if(!YAAMP_ALLOW_EXCHANGE && $ucoin && $ucoin->algo != $coin->algo) {
+				debuglog($coin->symbol.": invalid earning for {$user->username}, user coin is {$ucoin->symbol}");
+				$earning->status = -1;
+			}
+		
+			if (!$earning->save())
+				debuglog(__FUNCTION__.": Unable to insert earning!");
+
+			$user->last_earning = time();
+			$user->save();
+		}
+	}
+	else
+	{
+		debuglog("Solo Mining Found Block : $coin->id height $db_block->height with $db_block->userid");
+		
+		//Solo Reward
+		$amount = $reward;
+		$user = getdbo('db_accounts', $db_block->userid);
+		if(!$user) return;
+		
+		if(!$user->no_fees) $amount = take_yaamp_fee($amount, $coin->algo,YAAMP_FEES_MINIG +1);
+		
 		$earning = new db_earnings;
 		$earning->userid = $user->id;
+		$earning->amount = $amount;
 		$earning->coinid = $coin->id;
 		$earning->blockid = $db_block->id;
 		$earning->create_time = $db_block->time;
-		$earning->amount = $amount;
 		$earning->price = $coin->price;
 
 		if($db_block->category == 'generate')
@@ -58,19 +106,23 @@ function BackendBlockNew($coin, $db_block)
 		}
 		else	// immature
 			$earning->status = 0;
-		
+	
 		$ucoin = getdbo('db_coins', $user->coinid);
 		if(!YAAMP_ALLOW_EXCHANGE && $ucoin && $ucoin->algo != $coin->algo) {
 			debuglog($coin->symbol.": invalid earning for {$user->username}, user coin is {$ucoin->symbol}");
 			$earning->status = -1;
 		}
-
+		
 		if (!$earning->save())
 			debuglog(__FUNCTION__.": Unable to insert earning!");
-
+		
 		$user->last_earning = time();
 		$user->save();
+		
+		$db_block->solo = 1;
+		$db_block->save();
 	}
+		
 	
 	$delay = time() - 5*60;
 	$sqlCond = "time < $delay";
@@ -79,7 +131,7 @@ function BackendBlockNew($coin, $db_block)
 
 	try {
 		dborun("DELETE FROM shares WHERE algo=:algo AND $sqlCond", array(':algo'=>$coin->algo));
-
+	
 	} catch (CDbException $e) {
 
 		debuglog("unable to delete shares $sqlCond retrying...");
@@ -89,7 +141,6 @@ function BackendBlockNew($coin, $db_block)
 		// [*:message] => 'CDbCommand failed to execute the SQL statement: SQLSTATE[HY000]: General error: 1205 Lock wait timeout exceeded; try restarting transaction'
 	} 
 }
-	
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 // Import new blocks (notified by the stratum)

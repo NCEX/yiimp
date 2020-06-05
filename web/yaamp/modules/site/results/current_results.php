@@ -17,7 +17,7 @@ echo <<<END
 <th data-sorter="numeric" align="center">Auto Exchanged</th>
 <th data-sorter="numeric" align="center">Port</th>
 <th data-sorter="numeric" align="center">Symbol</th>
-<th data-sorter="numeric" align="center">Miners</th>
+<th data-sorter="numeric" align="center">Miners<br/>Share/Solo</th>
 <th data-sorter="numeric" align="center">Pool HashRate</th>
 <th data-sorter="numeric" align="center">Network Hashrate</th>
 <th data-sorter="currency" align="center">Fees**</th>
@@ -61,6 +61,7 @@ function cmp($a, $b)
 usort($algos, 'cmp');
 $total_coins = 0;
 $total_miners = 0;
+$total_solo = 0;
 $showestimates = false;
 echo "<tbody>";
 
@@ -84,9 +85,8 @@ foreach ($algos as $item)
     }
 
     if (!$coins) continue;
-    $workers = getdbocount('db_workers', "algo=:algo", array(
-        ':algo' => $algo
-    ));
+    $workers = getdbocount('db_workers', "algo=:algo and not password like '%m=solo%'", array(':algo' => $algo));
+    $solo_workers = getdbocount('db_workers',"algo=:algo and password like '%m=solo%'", array(':algo'=>$algo));
     $hashrate = controller()
         ->memcache
         ->get_database_scalar("current_hashrate-$algo", "select hashrate from hashrate where algo=:algo order by time desc limit 1", array(
@@ -165,20 +165,19 @@ foreach ($algos as $item)
             else echo "<td align='center' valign='top' style='font-size: .8em;'><img width=13 src='/images/ok.png'></td>";
 
             if ($port_count == 1) 
-				echo "<td align='center' style='font-size: .8em;'><b>$port</b></td>";
-            else 
 				echo "<td align='center' style='font-size: .8em;'><b>".$port_db->port."</b></td>";
+			else 
+				echo "<td align='center' style='font-size: .8em;'><b>$port</b></td>";
+            
             echo "<td align='center' style='font-size: .8em;'>$symbol</td>";
             
-			if ($port_count == 1) 
-				echo "<td align='center' style='font-size: .8em;'>" .$port_db->workers. "</td>";
-            else 
-				echo "<td align='center' style='font-size: .8em;'>$workers</td>";
-            
+			echo "<td align='center' style='font-size: .8em;'>$workers / $solo_workers</td>";
+			
 			$pool_hash = yaamp_coin_rate($coin->id);
             $pool_hash_sfx = $pool_hash ? Itoa2($pool_hash) . 'h/s' : '';
             echo "<td align='center' style='font-size: .8em;'>$pool_hash_sfx</td>";
-            $pool_hash_sfx = $pool_hash ? Itoa2($pool_hash) . 'h/s' : '';
+            
+			$pool_hash_sfx = $pool_hash ? Itoa2($pool_hash) . 'h/s' : '';
             $min_ttf = $coin->network_ttf > 0 ? min($coin->actual_ttf, $coin->network_ttf) : $coin->actual_ttf;
             $network_hash = controller()
                 ->memcache
@@ -214,6 +213,8 @@ foreach ($algos as $item)
 
     $total_coins += $coins;
     $total_miners += $workers;
+	$total_solo += $solo_workers;
+	
 }
 
 echo "</tbody>";
@@ -224,7 +225,7 @@ echo "<td><b>all</b></td>";
 echo "<td></td>";
 echo "<td></td>";
 echo "<td align=center style='font-size: .8em;'>$total_coins</td>";
-echo "<td align=center style='font-size: .8em;'>$total_miners</td>";
+echo "<td align=center style='font-size: .8em;'>$total_miners / $total_solo</td>";
 echo "<td></td>";
 echo "<td></td>";
 echo '<td class="estimate"></td>';
