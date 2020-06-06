@@ -96,7 +96,7 @@ foreach($db_blocks as $db_block)
 	
 	echo '<td>';
 	if($db_block->solo == '1') 
-		echo '<span class="block solo">solo</span>';
+		echo '<span class="block solo" title="Block was found by solo miner">solo</span>';
 	else echo '<span></span>'; 
 	echo "</td>";
 	
