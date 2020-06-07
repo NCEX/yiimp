@@ -20,11 +20,11 @@ echo <<<END
 <th data-sorter="numeric" align="center">Miners<br/>Share/Solo</th>
 <th data-sorter="numeric" align="center">Pool HashRate</th>
 <th data-sorter="numeric" align="center">Network Hashrate</th>
-<th data-sorter="currency" align="center">Fees**</th>
+<th data-sorter="currency" align="center">Fees<br/>Share/Solo</th>
 <!--<th data-sorter="currency" class="estimate" align="right">Current<br />Estimate</th>-->
 <!--<th data-sorter="currency" >Norm</th>-->
 <!--<th data-sorter="currency" class="estimate" align="right">24 Hours<br />Estimated</th>-->
-<th data-sorter="currency"align="center">24 Hours<br />Actual***</th>
+<th data-sorter="currency"align="center">24 Hours<br />Actual</th>
 </tr>
 </thead>
 END;
@@ -120,6 +120,7 @@ foreach ($algos as $item)
     $algo_unit_factor = yaamp_algo_mBTC_factor($algo);
     $btcmhday1 = $hashrate1 != 0 ? mbitcoinvaluetoa($total1 / $hashrate1 * 1000000 * 1000 * $algo_unit_factor) : '';
     $fees = yaamp_fee($algo);
+    $fees_solo = YAAMP_FEES_SOLO;
     $port = getAlgoPort($algo);
 
     if ($defaultalgo == $algo) echo "<tr style='cursor: pointer; background-color: #d9d9d9;' onclick='javascript:select_algo(\"$algo\")'>";
@@ -203,7 +204,7 @@ foreach ($algos as $item)
             }
             $network_hash = $network_hash ? Itoa2($network_hash) . 'h/s' : '';
             echo "<td align='center' style='font-size: .8em;' data='$pool_hash'>$network_hash</td>";
-            echo "<td align='center' style='font-size: .8em;'>{$fees}%</td>";
+            echo "<td align='center' style='font-size: .8em;'>{$fees}% / {$fees_solo}%</td>";
             $btcmhd = yaamp_profitability($coin);
             $btcmhd = mbitcoinvaluetoa($btcmhd);
             echo "<td align='center' style='font-size: .8em;'>$btcmhd</td>";
