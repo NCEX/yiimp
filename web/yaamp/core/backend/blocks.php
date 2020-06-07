@@ -89,7 +89,7 @@ function BackendBlockNew($coin, $db_block)
 		$user = getdbo('db_accounts', $db_block->userid);
 		if(!$user) return;
 		
-		if(!$user->no_fees) $amount = take_yaamp_fee($amount, $coin->algo,YAAMP_FEES_MINIG +1);
+		if(!$user->no_fees) $amount = take_yaamp_fee($amount, $coin->algo, YAAMP_FEES_SOLO);
 		
 		$earning = new db_earnings;
 		$earning->userid = $user->id;
