@@ -120,7 +120,7 @@ foreach ($algos as $item)
     $algo_unit_factor = yaamp_algo_mBTC_factor($algo);
     $btcmhday1 = $hashrate1 != 0 ? mbitcoinvaluetoa($total1 / $hashrate1 * 1000000 * 1000 * $algo_unit_factor) : '';
     $fees = yaamp_fee($algo);
-    $fees_solo = YAAMP_FEES_SOLO;
+    $fees_solo = yaamp_fee_solo($algo);
     $port = getAlgoPort($algo);
 
     if ($defaultalgo == $algo) echo "<tr style='cursor: pointer; background-color: #d9d9d9;' onclick='javascript:select_algo(\"$algo\")'>";

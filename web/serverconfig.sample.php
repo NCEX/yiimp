@@ -85,6 +85,13 @@ $configFixedPoolFees = array(
         'sha256' => 5.0,
 );
 
+// Sample fixed pool fees solo
+$configFixedPoolFeesSolo = array(
+		'zr5' => 2.0,
+        'scrypt' => 2.0,
+        'sha256' => 5.0,
+);
+
 // Sample custom stratum ports
 $configCustomPorts = array(
 //	'x11' => 7000,

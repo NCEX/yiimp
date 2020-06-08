@@ -89,7 +89,7 @@ class ApiController extends CommonController
             $btcmhday1        = $hashrate1 > 0 ? mbitcoinvaluetoa($total1 / $hashrate1 * 1000000 * 1000 * $algo_unit_factor) : 0;
 
             $fees = yaamp_fee($algo);
-            $fees_solo = yaamp_fee($algo, YAAMP_FEES_SOLO);
+            $fees_solo = yaamp_fee_solo($algo);
             $port = getAlgoPort($algo);
 
             $stat = array(
@@ -214,7 +214,7 @@ class ApiController extends CommonController
                 $network_hash = $coin->difficulty * 0x100000000 / ($min_ttf ? $min_ttf : 60);
 
 	            $fees = yaamp_fee($coin->algo);
-				$fees_solo = YAAMP_FEES_SOLO;
+				$fees_solo = yaamp_fee_solo($algo);;
 				
 				$port_db = getdbosql('db_stratums', "algo=:algo and symbol=:symbol", array(':algo' => $coin->algo,':symbol' => $symbol));
 

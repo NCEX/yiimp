@@ -460,6 +460,23 @@ function yaamp_fee($algo)
 	return $fee;
 }
 
+function yaamp_fee_solo($algo)
+{
+	$fee_solo = controller()->memcache->get("yaamp_fee_solo-$algo");
+	if($fee_solo && is_numeric($fee_solo)) return (float) $fee_solo;
+
+	$fee_solo = YAAMP_FEES_SOLO;
+
+	// local solo fees config
+	global $configFixedPoolFeesSolo;
+	if (isset($configFixedPoolFeesSolo[$algo])) {
+		$fee_solo = (float) $configFixedPoolFeesSolo[$algo];
+	}
+
+	controller()->memcache->set("yaamp_fee_solo-$algo", $fee_solo);
+	return $fee_solo;
+}
+
 function take_yaamp_fee($v, $algo, $percent=-1)
 {
 	if ($percent == -1) $percent = yaamp_fee($algo);
