@@ -172,7 +172,18 @@ foreach ($algos as $item)
             
             echo "<td align='center' style='font-size: .8em;'>$symbol</td>";
             
-			echo "<td align='center' style='font-size: .8em;'>$workers / $solo_workers</td>";
+            $workers_coins = getdbocount('db_workers', "algo=:algo and pid=:pid and not password like '%m=solo%'", array(
+                ':algo' => $algo,
+                ':pid' => $port_db->pid
+            ));
+            $solo_workers_coins = getdbocount('db_workers', "algo=:algo and pid=:pid and password like '%m=solo%'", array(
+                ':algo' => $algo,
+                ':pid' => $port_db->pid
+            ));
+			if ($port_count == 1) 
+				echo "<td align='center' style='font-size: .8em;'>$workers_coins / $solo_workers_coins</td>";
+			else
+				echo "<td align='center' style='font-size: .8em;'>$workers / $solo_workers</td>";
 			
 			$pool_hash = yaamp_coin_rate($coin->id);
             $pool_hash_sfx = $pool_hash ? Itoa2($pool_hash) . 'h/s' : '';
