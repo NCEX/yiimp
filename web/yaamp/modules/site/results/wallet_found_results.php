@@ -69,7 +69,7 @@ foreach($db_blocks as $db_block)
 		echo '<a href="/site/coin?id='.$coin->id.'"><b>'.$coin->name.'</b></a>';
 	else
 		echo '<b>'.$coin->name.'</b>';
-	echo '&nbsp;('.$coin->symbol.')'.$flags.'</td>';
+	echo '&nbsp;('.$coin->algo.')'.$flags.'</td>';
 
 
 	$d = datetoa2($db_block->time);
