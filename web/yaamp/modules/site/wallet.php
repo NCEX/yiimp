@@ -103,6 +103,13 @@ if($user) echo <<<END
 </div>
 END;
 
+if($user) echo <<<END
+<div id='main_found_results'>
+<br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br>
+</div>
+END;
+
 echo <<<END
 <div class="main-left-box">
 <div class="main-left-title">Search Wallet:</div>
@@ -133,7 +140,7 @@ foreach($recents as $addr)
 	echo '</td><td><a class="address" href="/?address='.$addr.'" style="font-family: monospace; font-size: 1.1em;">'.
 		$addr.'</a></td>';
 
-	$balance = bitcoinvaluetoa($user->balance);
+	$balance = bitcoinvaluetoa($user->balance); 
 
 	if($coin)
 		$balance = $balance>0? "$balance $coin->symbol": '';
@@ -188,6 +195,8 @@ function page_refresh()
 
 		main_graphs_refresh();
 		main_title_refresh();
+		
+		main_found_refresh();
 	}
 }
 
@@ -207,6 +216,17 @@ function main_wallet_refresh()
 {
 	var url = "/site/wallet_results?address=$username";
 	$.get(url, '', main_wallet_ready);
+}
+
+function main_found_ready(data)
+{
+	$('#main_found_results').html(data);
+}
+
+function main_found_refresh()
+{
+	var url = "/site/wallet_found_results?address=$username";
+	$.get(url, '', main_found_ready);
 }
 
 function main_wallet_refresh_details()

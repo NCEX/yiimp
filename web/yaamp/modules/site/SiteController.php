@@ -503,6 +503,11 @@ class SiteController extends CommonController
 		$this->renderPartial('results/user_earning_results');
 	}
 
+	public function actionWallet_found_results()
+	{
+		$this->renderPartial('results/wallet_found_results');
+	}
+
 	public function actionGraph_user_results()
 	{
 		$this->renderPartial('results/graph_user_results');
