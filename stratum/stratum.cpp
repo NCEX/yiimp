@@ -128,6 +128,7 @@ YAAMP_ALGO g_algos[] =
 	{"bmw512", bmw512_hash, 0x100, 0, 0},
 	{"c11", c11_hash, 1, 0, 0},
 	{"decred", decred_hash, 1, 0 },
+	{"curvehash", curve_hash, 0x10000, 0 },
 	{"dedal", dedal_hash, 0x100, 0, 0},
 	{"deep", deep_hash, 1, 0, 0},
 	{"dmd-gr", groestl_hash, 0x100, 0, 0}, /* diamond (double groestl) */

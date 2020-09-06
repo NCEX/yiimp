@@ -1,3 +1,6 @@
 [submodule "stratum/RandomX"]
 	path = stratum/RandomX
 	url = https://github.com/tevador/RandomX
+[submodule "stratum/secp256k1"]
+	path = stratum/secp256k1
+	url = https://github.com/bitcoin-core/secp256k1

@@ -11,7 +11,7 @@ CFLAGS += -DNO_EXCHANGE
 #CFLAGS=-c -O2 -I /usr/include/mysql
 LDFLAGS=-O2 `mysql_config --libs`
 
-LDLIBS=iniparser/libiniparser.a algos/libalgos.a sha3/libhash.a -lpthread -lgmp -lm -lstdc++ -lssl -lcrypto
+LDLIBS=iniparser/libiniparser.a algos/libalgos.a sha3/libhash.a -Isecp256k1/include secp256k1/.libs/libsecp256k1.a -lpthread -lgmp -lm -lstdc++ -lssl -lcrypto 
 LDLIBS+=-lmysqlclient
 
 SOURCES=stratum.cpp db.cpp coind.cpp coind_aux.cpp coind_template.cpp coind_submit.cpp util.cpp list.cpp \
@@ -30,10 +30,12 @@ OUTPUT=stratum
 CODEDIR1=algos
 CODEDIR2=sha3
 CODEDIR3=iniparser
+CODEDIR4=secp256k1
 
-.PHONY: projectcode1 projectcode2 projectcode3
 
-all: projectcode1 projectcode2 projectcode3 $(SOURCES) $(OUTPUT)
+.PHONY: projectcode1 projectcode2 projectcode3 projectcode4
+
+all: projectcode1 projectcode2 projectcode3 projectcode4 $(SOURCES) $(OUTPUT)
 
 projectcode1:
 	$(MAKE) -C $(CODEDIR1)
@@ -43,6 +45,9 @@ projectcode2:
 	
 projectcode3:
 	$(MAKE) -C $(CODEDIR3)
+
+projectcode4:
+	cd $(CODEDIR4) && chmod +x autogen.sh && ./autogen.sh && ./configure --enable-experimental --enable-module-ecdh --with-bignum=no --enable-endomorphism && $(MAKE)
 
 $(SOURCES): stratum.h util.h
 
