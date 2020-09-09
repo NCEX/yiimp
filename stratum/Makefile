@@ -38,7 +38,7 @@ CODEDIR4=secp256k1
 all: projectcode1 projectcode2 projectcode3 projectcode4 $(SOURCES) $(OUTPUT)
 
 projectcode1:
-	$(MAKE) -C $(CODEDIR1)
+	git submodule init && git submodule update && $(MAKE) -C $(CODEDIR1)
 
 projectcode2:
 	$(MAKE) -C $(CODEDIR2)
