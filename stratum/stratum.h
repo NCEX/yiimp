@@ -234,3 +234,4 @@ void sha256_double_hash_hex(const char *input, char *output, unsigned int len);
 #include "algos/minotaur.h"
 #include "algos/lyra2TDC.h"
 #include "algos/curvehash.h"
+#include "algos/x11k.h"

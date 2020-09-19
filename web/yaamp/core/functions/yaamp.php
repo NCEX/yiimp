@@ -54,6 +54,7 @@ function yaamp_get_algos()
 		'c11',
 		'x11',
 		'x11evo',
+		'x11k',
 		'x12',
 		'x13',
 		'x14',
@@ -194,6 +195,7 @@ function getAlgoColors($algo)
 		'deep'		=> '#e0ffff',
 		'x11'		=> '#f0f0a0',
 		'x11evo'	=> '#c0f0c0',
+		'x11k'		=> '#f0f0a0',
 		'x12'		=> '#ffe090',
 		'x13'		=> '#ffd880',
 		'bcd'		=> '#ffd880',
@@ -318,6 +320,7 @@ function getAlgoPort($algo)
 		'deep'		=> 3535,
 		'x11'		=> 3533,
 		'x11evo'	=> 3553,
+		'x11k'		=> 3534,
 		'x12'		=> 3233,
 		'x13'		=> 3633,
 		'x15'		=> 3733,
@@ -405,7 +408,6 @@ function getAlgoPort($algo)
 		'tribus'	=> 8533,
 	    'a5a'   	=> 8633,
 		'minotaur'	=> 7018,
-		
 		
 		'astralhash'   	=> 8640,
 		'globalhash'   	=> 8650,
