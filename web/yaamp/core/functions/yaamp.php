@@ -76,6 +76,7 @@ function yaamp_get_algos()
 		'myr-gr',
 		'm7m',
 		'megabtx',
+		'megamec',
 		'minotaur',
 		'phi',
 		'phi2',
@@ -240,6 +241,7 @@ function getAlgoColors($algo)
 		'luffa'		=> '#a0c0c0',
 		'm7m'		=> '#d0a0a0',
 		'megabtx'	=> '#d0f0a0',
+		'megamec'	=> '#d0f0a0',
 		'minotaur'	=> '#d0f0a0',
 		'penta'		=> '#80c0c0',
 		'nist5'		=> '#c0e0e0',
@@ -411,6 +413,7 @@ function getAlgoPort($algo)
 	    'a5a'   	=> 8633,
 		'minotaur'	=> 7018,
 		'megabtx'	=> 7066,
+		'megamec'	=> 7067,
 		
 		'astralhash'   	=> 8640,
 		'globalhash'   	=> 8650,
