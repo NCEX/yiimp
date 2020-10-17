@@ -216,7 +216,7 @@ class ApiController extends CommonController
 	            $fees = yaamp_fee($coin->algo);
 				$fees_solo = yaamp_fee_solo($algo);;
 				
-				$port_db = getdbosql('db_stratums', "algo=:algo and symbol=:symbol", array(':algo' => $coin->algo,':symbol' => $symbol));
+				$port_db = getdbosql('db_stratums', "algo=:algo and symbol=:symbol", array(':algo' => $coin->algo,':symbol' => $coin->symbol));
 
                 $data[$symbol] = array(
                     'algo' => $coin->algo,
