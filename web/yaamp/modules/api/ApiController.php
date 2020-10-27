@@ -46,7 +46,7 @@ class ApiController extends CommonController
                 ':algo' => $algo
             ));
 
-            $hashrate = controller()->memcache->get_database_scalar("api_status_hashrate-$algo", "select hashrate from hashrate where algo=:algo order by time desc limit 1", array(
+            $hashrate = (int) controller()->memcache->get_database_scalar("api_status_hashrate-$algo", "select hashrate from hashrate where algo=:algo order by time desc limit 1", array(
                 ':algo' => $algo
             ));
 
@@ -98,7 +98,7 @@ class ApiController extends CommonController
                 "coins" => $coins,
                 "fees" => (double) $fees,
                 "fees_solo" => (double) $fees_solo,
-                "hashrate" => (double) $hashrate,
+                "hashrate" => (int) $hashrate,
                 //"hashrate_shared" => (double) $hashrate_shared,
                 //"hashrate_solo" => (double) $hashrate_solo,
                 "workers" => (int) $workers,
@@ -204,7 +204,7 @@ class ApiController extends CommonController
                 }
 
                 $algo_hashrate_shared = controller()->memcache->get_database_scalar("api_status_hashrate-shares-{$coin->algo}", "SELECT hashrate FROM hashuser WHERE algo=:algo AND $workers_shared ORDER BY time DESC LIMIT 1", array(':algo' => $coin->algo));
-                $algo_hashrate_solo = controller()->memcache->get_database_scalar("api_status_hashrate-solo-{$coin->algo}", "SELECT hashrate FROM hashuser WHERE algo=:algo AND $workers_solo ORDER BY time DESC LIMIT 1", array(':algo' => $coin->algo));
+                $algo_hashrate_solo = controller()->memcache->get_database_scalar("api_status_hashrate-solo-{$coin->algo}", "SELECT hashrate FROM hashuser WHERE algo=:algo ORDER BY time DESC LIMIT 1", array(':algo' => $coin->algo));
 
                 $btcmhd = yaamp_profitability($coin);
                 $btcmhd = mbitcoinvaluetoa($btcmhd);
@@ -213,27 +213,26 @@ class ApiController extends CommonController
                 $min_ttf      = $coin->network_ttf > 0 ? min($coin->actual_ttf, $coin->network_ttf) : $coin->actual_ttf;
                 $network_hash = $coin->difficulty * 0x100000000 / ($min_ttf ? $min_ttf : 60);
 
-	            $fees = yaamp_fee($coin->algo);
-				$fees_solo = yaamp_fee_solo($algo);;
-				
+				$fees = yaamp_fee($coin->algo);
+				$fees_solo = yaamp_fee_solo($coin->algo);
 				$port_db = getdbosql('db_stratums', "algo=:algo and symbol=:symbol", array(':algo' => $coin->algo,':symbol' => $coin->symbol));
 
                 $data[$symbol] = array(
                     'algo' => $coin->algo,
-                    'port' => $port_db->port,
-                    'name' => $coin->name,
+					'port' => $port_db->port,
+					'name' => $coin->name,
                     'reward' => $coin->reward,
                     'height' => (int) $coin->block_height,
                     'difficulty' => $coin->difficulty,
-					"fees" => (double) $fees,
-					"fees_solo" => (double) $fees_solo,
+					'fees' => (double) $fees,
+					'fees_solo' => (double) $fees_solo,
                     'workers' => $workers,
                     'workers_shared' => $workers_shared,
                     'workers_solo' => $workers_solo,
                     'shares' => (int) arraySafeVal($shares, 'shares'),
                     'hashrate' => round($factor * $algo_hashrate),
-                    //'hashrate_shared' => round($algo_hashrate_shared),
-                    //'hashrate_solo' => round($algo_hashrate_solo),
+                    //'hashrate_shared' => round($factor * $algo_hashrate_shared),
+                    //'hashrate_solo' => round($factor * $algo_hashrate_solo),
                     'network_hashrate' => $network_hash,
                     'estimate' => $btcmhd,
                     //'percent' => round($factor * 100, 1),
