@@ -190,9 +190,9 @@ void coind_init(YAAMP_COIND *coind)
 	bool valid = coind_validate_address(coind);
 	if(valid) return;
 
-	sprintf(params, "[\"%s\"]", account);
+	sprintf(params, "[\"legacy\"]", account);
 
-	json_value *json = rpc_call(&coind->rpc, "getaccountaddress", params);
+	json_value *json = rpc_call(&coind->rpc, "getrawchangeaddress", params);
 	if(!json)
 	{
 		json = rpc_call(&coind->rpc, "getaddressesbyaccount", params);
