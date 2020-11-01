@@ -81,6 +81,7 @@ function showItemHeader($selected, $url, $name)
 function showPageHeader()
 {
 	echo '<div class="tabmenu-out">';
+	echo '<a href="/"><img src="/images/logo.png"></a>';
 	echo '<div class="tabmenu-inner">';
 
 	echo '&nbsp;&nbsp;<a href="/">'.YAAMP_SITE_NAME.'</a>';
