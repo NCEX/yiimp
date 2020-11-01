@@ -99,6 +99,14 @@ hr
 	box-shadow: 0 2px 3px rgba(0, 0, 0, .25);
 }
 
+.page .tabmenu-out img
+{
+	position: fixed;
+	top: 4px;
+	left: 30px;
+	height: 32px;
+}
+
 .page .tabmenu-inner
 {
 	font-size: 1.1em;
