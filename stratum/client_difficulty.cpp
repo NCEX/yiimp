@@ -61,14 +61,14 @@ void client_adjust_difficulty(YAAMP_CLIENT *client)
 	else if(client->difficulty_fixed)
 		return;
 
+	else if(client->shares_per_minute > 75)
+		client_change_difficulty(client, client->difficulty_actual*3.5);
+
+	else if(client->shares_per_minute > 50)
+		client_change_difficulty(client, client->difficulty_actual*3);
+
 	else if(client->shares_per_minute > 25)
 		client_change_difficulty(client, client->difficulty_actual*2);
-
-	else if(client->shares_per_minute > 20)
-		client_change_difficulty(client, client->difficulty_actual*1.5);
-
-	else if(client->shares_per_minute <  5)
-		client_change_difficulty(client, client->difficulty_actual/2);
 }
 
 int client_send_difficulty(YAAMP_CLIENT *client, double difficulty)
@@ -79,7 +79,7 @@ int client_send_difficulty(YAAMP_CLIENT *client, double difficulty)
 	if(difficulty >= 1)
 		client_call(client, "mining.set_difficulty", "[%.0f]", difficulty);
 	else
-		client_call(client, "mining.set_difficulty", "[%.3f]", difficulty);
+		client_call(client, "mining.set_difficulty", "[%0.8f]", difficulty);
 	return 0;
 }
 
