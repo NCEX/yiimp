@@ -48,8 +48,11 @@ bool client_subscribe(YAAMP_CLIENT *client, json_value *json_params)
 		if (json_params->u.array.values[0]->u.string.ptr)
 			strncpy(client->version, json_params->u.array.values[0]->u.string.ptr, 1023);
 
-		if(strstr(client->version, "NiceHash") || strstr(client->version, "proxy") || strstr(client->version, "/3."))
-			client->reconnectable = false;
+		if (strstr(client->version, "NiceHash"))
+                       client->difficulty_actual = g_stratum_nicehash_difficulty;
+
+		if(strstr(client->version, "proxy") || strstr(client->version, "/3."))
+                        client->reconnectable = false;
 		
 		if(strstr(client->version, "ccminer")) client->stats = true;
 		if(strstr(client->version, "cpuminer-multi")) client->stats = true;
