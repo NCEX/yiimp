@@ -156,49 +156,34 @@ bool client_validate_user_address(YAAMP_CLIENT *client)
 		}
 	}
 
-	if (!client->coinid) {
-		for(CLI li = g_list_coind.first; li; li = li->next) {
-			YAAMP_COIND *coind = (YAAMP_COIND *)li->data;
-			// debuglog("user %s testing on coin %s ...\n", client->username, coind->symbol);
-			if(!coind_can_mine(coind)) continue;
-			if(strlen(g_current_algo->name) && strcmp(g_current_algo->name, coind->algo)) continue;
-			if(coind_validate_user_address(coind, client->username)) {
-				debuglog("new user %s for coin %s\n", client->username, coind->symbol);
-				client->coinid = coind->id;
-				// update the db now to prevent addresses conflicts
-				CommonLock(&g_db_mutex);
-				db_init_user_coinid(g_db, client);
-				CommonUnlock(&g_db_mutex);
-				return true;
-			}
-		}
-	}
+        //! dont expose pthread_mutex_lock for coind to get bashed out by ddos..
+        if (!is_base58(client->username)) {
+            client_send_result(client, "false");
+            return false;
+        }
 
-	if (!client->coinid) {
-		return false;
-	}
+        //! ..once we know its actually a valid address, go for broke
+        YAAMP_COIND *coind = (YAAMP_COIND *)object_find(&g_list_coind, client->coinid);
+        if (!coind) {
+               clientlog(client, "unable to find the wallet for coinid %d...", client->coinid);
+               return false;
+        } else {
+               if(g_current_algo && strlen(g_current_algo->name) && strcmp(g_current_algo->name, coind->algo)) {
+                       clientlog(client, "%s address is on the wrong coin %s, reset to auto...", client->username, coind->symbol);
+                       client->coinid = 0;
+                       CommonLock(&g_db_mutex);
+                       db_init_user_coinid(g_db, client);
+                       CommonUnlock(&g_db_mutex);
+                       return false;
+               }
+        }
 
-	YAAMP_COIND *coind = (YAAMP_COIND *)object_find(&g_list_coind, client->coinid);
-	if (!coind) {
-		clientlog(client, "unable to find the wallet for coinid %d...", client->coinid);
-		return false;
-	} else {
-		if(g_current_algo && strlen(g_current_algo->name) && strcmp(g_current_algo->name, coind->algo)) {
-			clientlog(client, "%s address is on the wrong coin %s, reset to auto...", client->username, coind->symbol);
-			client->coinid = 0;
-			CommonLock(&g_db_mutex);
-			db_init_user_coinid(g_db, client);
-			CommonUnlock(&g_db_mutex);
-			return false;
-		}
-	}
-
-	bool isvalid = coind_validate_user_address(coind, client->username);
-	if (isvalid) {
-		client->coinid = coind->id;
-	} else {
-		clientlog(client, "unable to verify %s address for user coinid %d...", coind->symbol, client->coinid);
-	}
+        bool isvalid = coind_validate_user_address(coind, client->username);
+        if (isvalid) {
+               client->coinid = coind->id;
+        } else {
+               clientlog(client, "unable to verify %s address for user coinid %d...", coind->symbol, client->coinid);
+        }
 	return isvalid;
 }
 
