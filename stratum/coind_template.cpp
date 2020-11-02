@@ -631,39 +631,21 @@ bool coind_create_job(YAAMP_COIND *coind, bool force)
 
 	CommonLock(&coind->mutex);
 
-	YAAMP_JOB_TEMPLATE *templ;
-
-	// DCR gbt block header is not compatible with getwork submit, so...
-
-	if (coind->usegetwork && strcmp(coind->rpcencoding, "DCR") == 0)
-		templ = decred_create_worktemplate(coind);
-	else
-		templ = coind_create_template(coind);
-
+	YAAMP_JOB_TEMPLATE *templ = coind_create_template(coind);
 	if(!templ)
 	{
 		CommonUnlock(&coind->mutex);
-//		debuglog("%s: create job template failed!\n", coind->symbol);
 		return false;
 	}
 
 	YAAMP_JOB *job_last = coind->job;
 
-	if(	!force && job_last && job_last->templ && job_last->templ->created + 45 > time(NULL) &&
-		templ->height == job_last->templ->height &&
-		templ->txcount == job_last->templ->txcount &&
-		strcmp(templ->coinb2, job_last->templ->coinb2) == 0)
-	{
-//		debuglog("coind_create_job %s %d same template %x \n", coind->name, coind->height, coind->job->id);
-		if (templ->txcount) {
-			templ->txsteps.clear();
-			templ->txdata.clear();
-		}
-		delete templ;
-
-		CommonUnlock(&coind->mutex);
-		return true;
-	}
+        //! one job per height
+        if (job_last && templ && templ->height == job_last->templ->height) {
+            delete templ;
+            CommonUnlock(&coind->mutex);
+            return true;
+        }
 
 	////////////////////////////////////////////////////////////////////////////////////////
 
